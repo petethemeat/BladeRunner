@@ -38,6 +38,17 @@ public class dbConnection
 		return rs;
 				
 	}
+	private ResultSet getTable() throws SQLException
+	{
+		
+		_connection.setReadOnly(false);
+		
+		Statement stmt = _connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM saw_blades");
+		
+		return rs;
+	}
 	
 	public void updateField(String id, String[] fields, String[] values) throws SQLException
 	{
@@ -62,6 +73,32 @@ public class dbConnection
 		
 		rs.absolute(1);
 		return rs.getString(field);
+	}
+	
+	public void addRow(String[] fields, String[] values) throws SQLException
+	{
+		ResultSet rs = this.getTable();
+		
+		rs.moveToInsertRow();
+		
+		for(int i = 0; i < fields.length; i++)
+		{
+			rs.updateString(fields[i], values[i]);
+		}
+		
+		rs.insertRow();
+		
+	}
+	
+	public void deleteRow(String id) throws SQLException
+	{
+
+		ResultSet rs = queryBlade(id);
+		
+		rs.absolute(1);
+		
+		rs.deleteRow(); 
+		
 	}
 	
 }

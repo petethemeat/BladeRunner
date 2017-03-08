@@ -46,17 +46,19 @@ public class Hub {
 	{
 		Hub.start();
 		
-		String[] values = {"69", "2013-10-16 12:21:22", "89"};
-		String[] fields = {"blade_size", "start_date", "hours_used"};
 		
-		UpdateController.run("1", values, fields);
+		String[] fields2 = {"id", "blade_size", "start_date", "hours_used"};
+		String[] values2 = {"20", "11", "2012-08-06 08:11:12", "30"};
+		AddController.run(fields2, values2);
 		
-		String[] results = QueryController.run("1");
+		String[] results = QueryController.run("20");
 		
 		for(String result : results)
 		{
 			System.out.println(result);
 		}
+		
+		DeleteController.run("20");
 	}
 
 }
