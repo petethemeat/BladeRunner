@@ -2,8 +2,6 @@ package Database;
 
 import java.sql.*;
 
-import com.mysql.jdbc.jdbc2.optional.*;
-
 public class dbConnection 
 {
 	private dbSource _source;
@@ -16,16 +14,21 @@ public class dbConnection
 	
 	public void startConnection() throws SQLException
 	{
+		
 		_connection = _source.getSource().getConnection();
+		
 	}
 	
 	public void closeConnection() throws SQLException
 	{
+		
 		_connection.close();
+		
 	}
 	
 	private ResultSet queryBlade(String id) throws SQLException
 	{
+		
 		_connection.setReadOnly(false);
 			
 		Statement stmt = _connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -36,13 +39,18 @@ public class dbConnection
 				
 	}
 	
-	public void updateField(String id, String field, String value) throws SQLException
+	public void updateField(String id, String[] fields, String[] values) throws SQLException
 	{
 		
 		ResultSet rs = this.queryBlade(id);
 		
 		rs.absolute(1);
-		rs.updateString(field, value);
+		
+		for(int i = 0; i < fields.length; i++)
+		{
+			rs.updateString(fields[i], values[i]);
+		}
+		
 		rs.updateRow();
 			
 	}
