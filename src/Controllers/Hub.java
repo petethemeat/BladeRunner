@@ -1,16 +1,20 @@
 package Controllers;
 
 import Database.dbSource;
+import Logging.BladeLogger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class Hub {
 	
 	//This class will read important information from configuration and generate important shared data
 	
 	private static dbSource source;
+	
+	public final static BladeLogger logger = new BladeLogger();
 	
 	public static void start()
 	{
@@ -45,10 +49,11 @@ public class Hub {
 	public static void main(String args[])
 	{
 		Hub.start();
-		
+		Hub.logger.info("Blade runner test is starting");
+	
 		
 		String[] fields2 = {"id", "blade_size", "start_date", "hours_used"};
-		String[] values2 = {"20", "11", "2012-08-06 08:11:12", "30"};
+		String[] values2 = {"35", "11", "2012-08-06 08:11:12", "30"};
 		AddController.run(fields2, values2);
 		
 		String[] results = QueryController.run("20");
@@ -58,7 +63,6 @@ public class Hub {
 			System.out.println(result);
 		}
 		
-		DeleteController.run("20");
 	}
 
 }
