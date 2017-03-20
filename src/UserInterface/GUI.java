@@ -173,7 +173,7 @@ public class GUI {
 		
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("./img/logo.png")).getImage();
 		logo.setIcon(new ImageIcon(img));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
 		
