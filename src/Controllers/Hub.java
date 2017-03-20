@@ -63,6 +63,8 @@ public class Hub {
 			System.out.println(result);
 		}
 		
+		System.out.println("Hopefully we can push and pull from git");
+		
 	}
 
 }
