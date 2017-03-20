@@ -5,3 +5,6 @@ accesstoken.key
 
 *.swp
 *.save*
+
+config.properties
+
