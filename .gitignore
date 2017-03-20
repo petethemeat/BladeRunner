@@ -2,3 +2,6 @@ accesstoken.key
 .metadata
 .classpath
 .project
+
+*.swp
+*.save*
