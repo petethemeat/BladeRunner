@@ -3,7 +3,6 @@ package Logging;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
-import Controllers.Hub;
 
 
 public class BladeLogger {
