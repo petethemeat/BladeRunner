@@ -14,13 +14,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 
 import javax.swing.SwingConstants;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -28,6 +31,9 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+
+import Controllers.Hub;
+
 import java.awt.Dimension;
 
 public class GUI {
@@ -39,6 +45,7 @@ public class GUI {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Hub.start();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -209,20 +216,28 @@ public class GUI {
 		mntmQr_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Open file for QR instructions
-				InputStream qr = this.getClass().getResourceAsStream("QRManual.pdf");
-				InputStreamReader qrRead = new InputStreamReader(qr);
-//				if (Desktop.isDesktopSupported()) {
-//				    try {
-//				        File myFile = new File("./docs/QRManual.pdf");
-//				        Desktop.getDesktop().open(myFile);
-//				    } catch (IOException ex) {
-//				        System.out.println("Could not locate file");
-//				    }
-//				}
+				try {
+					// Create temp file for copying original to
+					// Delete upon exiting
+				    File file = File.createTempFile("QRManual", ".pdf");
+			        file.deleteOnExit();
+			        // Extract file from its location 
+			        // Get the path for copying to
+			        InputStream resource = getClass().getResourceAsStream("/QRManual.pdf");
+			        Path temp = file.toPath();
+			        // Copy original to temporary for display on desktop
+			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
+
+			        // Show file on desktop
+				    if(Desktop.isDesktopSupported()){
+				        Desktop dTop = Desktop.getDesktop();
+				        dTop.open(file);  
+				    }
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 			}
 		});
-		
-		
 		mnHelp.add(mntmQr_1);
 		
 		JMenu mnRfid = new JMenu("RFID");
@@ -233,13 +248,25 @@ public class GUI {
 		mntmTiMicrocontroller.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Open file for TI datasheet
-				if (Desktop.isDesktopSupported()) {
-				    try {
-				        File myFile = new File("./docs/tm4c123.pdf");
-				        Desktop.getDesktop().open(myFile);
-				    } catch (IOException ex) {
-				        System.out.println("Could not locate file");
+				try {
+					// Create temp file for copying original to
+					// Delete upon exiting
+				    File file = File.createTempFile("TIDatasheet", ".pdf");
+			        file.deleteOnExit();
+			        // Extract file from its location 
+			        // Get the path for copying to
+			        InputStream resource = getClass().getResourceAsStream("/tm4c123.pdf");
+			        Path temp = file.toPath();
+			        // Copy original to temporary for display on desktop
+			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
+
+			        // Show file on desktop
+				    if(Desktop.isDesktopSupported()){
+				        Desktop dTop = Desktop.getDesktop();
+				        dTop.open(file);  
 				    }
+				} catch (IOException ex) {
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -249,14 +276,26 @@ public class GUI {
 		JMenuItem mntmRfidM = new JMenuItem("RFID Module");
 		mntmRfidM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Open file for mfrc522 datasheet
-				if (Desktop.isDesktopSupported()) {
-				    try {
-				        File myFile = new File("./docs/MFRC522.pdf");
-				        Desktop.getDesktop().open(myFile);
-				    } catch (IOException ex) {
-				        System.out.println("Could not locate file");
+				// Open file for RFID antenna datasheet
+				try {
+					// Create temp file for copying original to
+					// Delete upon exiting
+				    File file = File.createTempFile("RFIDDatasheet", ".pdf");
+			        file.deleteOnExit();
+			        // Extract file from its location 
+			        // Get the path for copying to
+			        InputStream resource = getClass().getResourceAsStream("/MFRC522.pdf");
+			        Path temp = file.toPath();
+			        // Copy original to temporary for display on desktop
+			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
+
+			        // Show file on desktop
+				    if(Desktop.isDesktopSupported()){
+				        Desktop dTop = Desktop.getDesktop();
+				        dTop.open(file);  
 				    }
+				} catch (IOException ex) {
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -266,14 +305,26 @@ public class GUI {
 		JMenuItem mntmWirelessModule = new JMenuItem("Wireless Module");
 		mntmWirelessModule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Open file for ESP8266 wireless datasheet
-				if (Desktop.isDesktopSupported()) {
-				    try {
-				        File myFile = new File("./docs/ESP8266.pdf");
-				        Desktop.getDesktop().open(myFile);
-				    } catch (IOException ex) {
-				        System.out.println("Could not locate file");
+				// Open file for WiFi module datasheet
+				try {
+					// Create temp file for copying original to
+					// Delete upon exiting
+				    File file = File.createTempFile("WiFiDatasheet", ".pdf");
+			        file.deleteOnExit();
+			        // Extract file from its location 
+			        // Get the path for copying to
+			        InputStream resource = getClass().getResourceAsStream("/ESP8266.pdf");
+			        Path temp = file.toPath();
+			        // Copy original to temporary for display on desktop
+			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
+
+			        // Show file on desktop
+				    if(Desktop.isDesktopSupported()){
+				        Desktop dTop = Desktop.getDesktop();
+				        dTop.open(file);  
 				    }
+				} catch (IOException ex) {
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -309,7 +360,13 @@ public class GUI {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnQuery = new JButton("QUERY DATABASE");
+		btnQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnQuery.setIcon(null);
+		btnQuery.setBackground(Color.LIGHT_GRAY);
 		btnQuery.setHorizontalTextPosition(SwingConstants.RIGHT);
 		btnQuery.setPreferredSize(new Dimension(280, 60));
 		btnQuery.setMaximumSize(new Dimension(280, 60));
