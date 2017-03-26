@@ -1,7 +1,8 @@
-package UserInterface;
+package ui;
 
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -24,28 +25,25 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
-
-import Controllers.Hub;
-
 import java.awt.Dimension;
 
 public class GUI {
 
 	private JFrame frmBit;
 	private JTextField textField;
+	private double screenWidth;
+	private double screenHeight;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		Hub.start();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -69,10 +67,17 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// Get size of screen for adjusting of window
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		screenWidth = screenSize.getWidth();
+		screenHeight = screenSize.getHeight();
+		
+		// Setup frame for laying panels and layouts for placement of components
 		frmBit = new JFrame();
 		frmBit.setResizable(false);
 		frmBit.setTitle("BIT");
-		frmBit.setBounds(100, 100, 980, 620);
+		frmBit.pack();
+		frmBit.setSize((int)screenWidth/2,(int)screenHeight/2);
 		frmBit.setLocationRelativeTo(null);
 		frmBit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -138,7 +143,7 @@ public class GUI {
 		btngroup.add(rdbtnmntmQr);
 		btngroup.add(rdbtnmntmRfid);
 		
-		JMenu mnSetup = new JMenu("QR Setup");
+		JMenu mnSetup = new JMenu("Setup");
 		mnSetup.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		menuBar.add(mnSetup);
 		
@@ -167,17 +172,6 @@ public class GUI {
 		mnMac.add(qr_mac);
 		Image mac_img = new ImageIcon(this.getClass().getResource("/macPairing.PNG")).getImage();
 		qr_mac.setIcon(new ImageIcon(mac_img));
-		
-		// Menu item android/ios to pair QR with mobile devices
-		JMenu mnAndroidios = new JMenu("Android/iOS");
-		mnAndroidios.setFont(new Font("Segoe UI", Font.PLAIN, 26));
-		mnPairing.add(mnAndroidios);
-		
-		// Barcode image (mobile) and instructions for pairing
-		JLabel qr_mobile = new JLabel("");
-		mnAndroidios.add(qr_mobile);
-		Image mobile_img = new ImageIcon(this.getClass().getResource("/mobilePairing.png")).getImage();
-		qr_mobile.setIcon(new ImageIcon(mobile_img));
 		
 		// Drop menu for selection of different QR scan modes
 		JMenu mnScanMode = new JMenu("Scan Mode");
@@ -217,27 +211,24 @@ public class GUI {
 			public void actionPerformed(ActionEvent arg0) {
 				// Open file for QR instructions
 				try {
-					// Create temp file for copying original to
-					// Delete upon exiting
 				    File file = File.createTempFile("QRManual", ".pdf");
 			        file.deleteOnExit();
-			        // Extract file from its location 
-			        // Get the path for copying to
 			        InputStream resource = getClass().getResourceAsStream("/QRManual.pdf");
 			        Path temp = file.toPath();
-			        // Copy original to temporary for display on desktop
+			        
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
 
-			        // Show file on desktop
-				    if(Desktop.isDesktopSupported()){
+				    if(Desktop.isDesktopSupported())
+				    {
 				        Desktop dTop = Desktop.getDesktop();
-				        dTop.open(file);  
+				        dTop.open(file);
+				       
 				    }
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
+				} catch (IOException ex) {}
 			}
 		});
+		
+		
 		mnHelp.add(mntmQr_1);
 		
 		JMenu mnRfid = new JMenu("RFID");
@@ -276,11 +267,11 @@ public class GUI {
 		JMenuItem mntmRfidM = new JMenuItem("RFID Module");
 		mntmRfidM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Open file for RFID antenna datasheet
+				// Open file for mfrc522 datasheet
 				try {
 					// Create temp file for copying original to
 					// Delete upon exiting
-				    File file = File.createTempFile("RFIDDatasheet", ".pdf");
+				    File file = File.createTempFile("RFID", ".pdf");
 			        file.deleteOnExit();
 			        // Extract file from its location 
 			        // Get the path for copying to
@@ -305,11 +296,11 @@ public class GUI {
 		JMenuItem mntmWirelessModule = new JMenuItem("Wireless Module");
 		mntmWirelessModule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Open file for WiFi module datasheet
+				// Open file for ESP8266 wireless datasheet
 				try {
 					// Create temp file for copying original to
 					// Delete upon exiting
-				    File file = File.createTempFile("WiFiDatasheet", ".pdf");
+				    File file = File.createTempFile("WiFi", ".pdf");
 			        file.deleteOnExit();
 			        // Extract file from its location 
 			        // Get the path for copying to
@@ -331,10 +322,12 @@ public class GUI {
 		mntmWirelessModule.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnRfid.add(mntmWirelessModule);
 		
+		// Setup logo for top of screen and resize appropriately
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
 		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
-		logo.setIcon(new ImageIcon(img));
+		Image scaledimg = img.getScaledInstance((int)screenWidth/2, (int)screenHeight/5,  java.awt.Image.SCALE_SMOOTH);
+		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
 		
 		JPanel panel = new JPanel();
@@ -346,11 +339,11 @@ public class GUI {
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 50));
 		
 		JLabel lblBladeId = new JLabel("Blade ID :");
-		lblBladeId.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 40));
 		panel_1.add(lblBladeId);
 		
 		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		textField.setFont(new Font("Arial", Font.PLAIN, 40));
 		panel_1.add(textField);
 		textField.setColumns(20);
 		textField.setEditable(false);
@@ -360,19 +353,14 @@ public class GUI {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnQuery = new JButton("QUERY DATABASE");
-		btnQuery.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
-		btnQuery.setIcon(null);
 		btnQuery.setBackground(Color.LIGHT_GRAY);
+		btnQuery.setIcon(null);
 		btnQuery.setHorizontalTextPosition(SwingConstants.RIGHT);
-		btnQuery.setPreferredSize(new Dimension(280, 60));
-		btnQuery.setMaximumSize(new Dimension(280, 60));
+		btnQuery.setPreferredSize(new Dimension(300, 60));
+		btnQuery.setMaximumSize(new Dimension(400, 80));
 		btnQuery.setFocusPainted(false);
 		btnQuery.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnQuery.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		btnQuery.setFont(new Font("Arial", Font.PLAIN, 30));
 		panel_2.add(btnQuery);
 		
 	}
