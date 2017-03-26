@@ -33,7 +33,7 @@ public class dbConnection
 			
 		Statement stmt = _connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			
-		ResultSet rs = stmt.executeQuery("SELECT * FROM saw_blades WHERE id=" + id);
+		ResultSet rs = stmt.executeQuery("SELECT * FROM " + _source.getTable() +  " WHERE id=" + id);
 						
 		return rs;
 				
@@ -45,7 +45,7 @@ public class dbConnection
 		
 		Statement stmt = _connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 		
-		ResultSet rs = stmt.executeQuery("SELECT * FROM saw_blades");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM " + _source.getTable());
 		
 		return rs;
 	}

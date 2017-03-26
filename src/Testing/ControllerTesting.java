@@ -6,46 +6,20 @@ import java.sql.SQLException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.AfterClass;
 import Controllers.*;
 
 
 public class ControllerTesting
 {
 	
-	@BeforeClass
-	public static void initialize()
-	{
-		Hub.start();
-		
-		String[] fields = {"id", "blade_size", "start_date", "hours_used"};
-		String[] values = {"500", "11", "2012-08-06 08:11:12", "30"};
-		
-		Hub.logger.info("Begin Controller Unit Tests... \n");
-		try
-		{
-			DeleteController.run("1000");
-
-		}
-		catch(SQLException e)
-		{
-			
-		}
-		try
-		{
-			AddController.run(fields, values);
-		}
-		catch(SQLException e)
-		{
-			
-		}
-	}
 	/*
-	 * This test makes sure a normal blade can be added with expected fields
+	 * This test makes sure a new entry can be added and deleted
 	 */
 	@Test
-	public void testAddContoller()
+	public void testAddDeleteContoller()
 	{
-		Hub.logger.info("testAddController start... \n");
+		Hub.logger.info("testAddDeleteController start... \n");
 		
 		String[] fields = {"id", "blade_size", "start_date", "hours_used"};
 		String[] values = {"600", "11", "2012-08-06 08:11:12", "30"};
@@ -58,10 +32,20 @@ public class ControllerTesting
 		}
 		catch(SQLException e)
 		{
-			Hub.logger.severe("testAddController has failed: \n" + e.getMessage() + "\n");	
+			Hub.logger.severe("testAddDeleteController has failed: \n Could not add entry" + e.getMessage() + "\n");	
+			assertNull(1);
+		}
+		try
+		{
+			DeleteController.run("600");
+		}
+		catch(SQLException e)
+		{
+			Hub.logger.severe("testAddDeleteController has failed: \n Could not delete entry" + e.getMessage() + "\n");	
 			assertNull(1);
 		}
 		Hub.logger.info("testAddController has passed! \n");
+		
 		
 	}
 	
@@ -126,35 +110,27 @@ public class ControllerTesting
 	/*
 	 * "This test ensures that a blade is no longer in the database after being deleted"
 	 */
-	@Test
-	public void deleteController()
-	{
-		Hub.logger.info("testAddMissingField start... \n");
-		
-		String[] fields = {"id", "blade_size", "hours_used"};
-		String[] values = {"600", "11", "30"};
-		
-		Hub.start();
-		
-		try
-		{
-			DeleteController.run("600");
-			AddController.run(fields, values);
-		}
-		catch(SQLException e)
-		{
-			
-		}
-	}
 	
 	@Test
 	public void testQueryController()
 	{
 		Hub.logger.info("testQueryController start... \n");
+		String[] fields = {"id", "blade_size", "start_date", "hours_used"};
+		String[] values = {"500", "11", "2012-08-06 08:11:12", "30"};
 		
 		try
 		{
+			AddController.run(fields, values);
 			QueryController.run("500");
+		}
+		catch(SQLException e)
+		{
+			Hub.logger.severe("testQueryContoller has failed: \n" + e.getMessage() + "\n");	
+			assertNull(1);
+		}
+		try
+		{
+			DeleteController.run("500");
 		}
 		catch(SQLException e)
 		{
@@ -203,7 +179,39 @@ public class ControllerTesting
 			Hub.logger.severe("testUpdateController has failed: \n" + e.getMessage() + "\n");
 			assertNull(1);
 		}
+		try
+		{
+			DeleteController.run(id);
+		}
+		catch(SQLException e)
+		{
+			Hub.logger.severe("testUpdateController has failed: \n" + e.getMessage() + "\n");
+			assertNull(1);
+		}
+		
 		
 		Hub.logger.info("testUpdateController has passed!");
 	}
+	
+	@Test
+	public void testDeleteNonexistent()
+	{
+		Hub.logger.info("testDeleteNonexistent start.. \n");
+		
+		String id = "700";
+		try
+		{
+			DeleteController.run(id);
+		}
+		catch(SQLException e)
+		{
+			Hub.logger.info("testDeleteNonexistent has passed!");
+			return;
+		}
+		
+		Hub.logger.info("testDeleteNonexistent has failed \n A nonexistent blade was deleted");
+		assertNull(1);
+	}
+	
+	
 }

@@ -36,8 +36,9 @@ public class Hub {
 		String password = prop.getProperty("dbpassword");
 		String serverName = prop.getProperty("dbhost");
 		String dbName = prop.getProperty("dbname");
+		String table = prop.getProperty("dbtable");
 		
-		source = new dbSource(user, password, serverName, dbName);
+		source = new dbSource(user, password, serverName, dbName, table);
 		
 	}
 	
