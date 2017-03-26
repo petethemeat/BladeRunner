@@ -17,15 +17,22 @@ public class ControllerTesting
 	{
 		Hub.start();
 		
+		String[] fields = {"id", "blade_size", "start_date", "hours_used"};
+		String[] values = {"500", "11", "2012-08-06 08:11:12", "30"};
+		
 		Hub.logger.info("Begin Controller Unit Tests... \n");
 		try
 		{
-			DeleteController.run("500");
 			DeleteController.run("1000");
-			String[] fields = {"id", "blade_size", "start_date", "hours_used"};
-			String[] values = {"1000", "11", "2012-08-06 08:11:12", "30"};
-			AddController.run(fields, values);
+
+		}
+		catch(SQLException e)
+		{
 			
+		}
+		try
+		{
+			AddController.run(fields, values);
 		}
 		catch(SQLException e)
 		{
@@ -41,7 +48,7 @@ public class ControllerTesting
 		Hub.logger.info("testAddController start... \n");
 		
 		String[] fields = {"id", "blade_size", "start_date", "hours_used"};
-		String[] values = {"500", "11", "2012-08-06 08:11:12", "30"};
+		String[] values = {"600", "11", "2012-08-06 08:11:12", "30"};
 		
 		Hub.start();
 		
@@ -131,7 +138,6 @@ public class ControllerTesting
 		
 		try
 		{
-			AddController.run(fields, values);
 			DeleteController.run("600");
 			AddController.run(fields, values);
 		}
