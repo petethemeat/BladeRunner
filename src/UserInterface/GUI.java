@@ -1,4 +1,4 @@
-package ui;
+package UserInterface;
 
 import java.awt.EventQueue;
 import java.awt.Image;

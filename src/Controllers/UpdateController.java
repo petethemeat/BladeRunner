@@ -5,22 +5,14 @@ import Database.*;
 
 public class UpdateController
 {
-	public static void run(String id, String[] values, String[] fields)
+	public static void run(String id, String[] values, String[] fields) throws	SQLException	
 	{
 		dbSource source = Hub.getSource();
 		dbConnection connection = new dbConnection(source);
-		
-		try 
-		{
-			connection.startConnection();
-			connection.updateField(id, fields, values);
-			connection.closeConnection();
-		} 
-		
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
+
+		connection.startConnection();
+		connection.updateField(id, fields, values);
+		connection.closeConnection();
 		
 	}
 }
