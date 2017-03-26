@@ -9,10 +9,6 @@ public class BladeLogger {
 	
 	public final static Logger logger = Logger.getLogger(BladeLogger.class.getName());	
 	
-	public BladeLogger()
-	{
-		logger.addHandler(new ConsoleHandler());
-	}
 	
 	public void info(String message)
 	{

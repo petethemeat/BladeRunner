@@ -5,6 +5,7 @@ import Logging.BladeLogger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class Hub {
@@ -53,16 +54,24 @@ public class Hub {
 		
 		String[] fields2 = {"id", "blade_size", "start_date", "hours_used"};
 		String[] values2 = {"35", "11", "2012-08-06 08:11:12", "30"};
-		AddController.run(fields2, values2);
 		
-		String[] results = QueryController.run("20");
 		
-		for(String result : results)
+		try
 		{
-			System.out.println(result);
+			AddController.run(fields2, values2);
+			
+			String[] results = QueryController.run("20");
+			
+			for(String result : results)
+			{
+				System.out.println(result);
+			}
+		}
+		catch(SQLException e)
+		{
+			
 		}
 		
-		System.out.println("Hopefully we can push and pull from git");
 		
 	}
 
