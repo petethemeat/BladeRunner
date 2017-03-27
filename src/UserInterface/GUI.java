@@ -25,12 +25,18 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
+
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+
+import Controllers.Hub;
+import Controllers.QueryController;
+
 import java.awt.Dimension;
 
 public class GUI {
@@ -39,11 +45,16 @@ public class GUI {
 	private JTextField textField;
 	private double screenWidth;
 	private double screenHeight;
+	private int screenX;
+	private int screenY;
+	private String[] results;
+	private String id;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		Hub.start();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -156,22 +167,23 @@ public class GUI {
 		mnPc.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnPairing.add(mnPc);
 		
-		// Barcode image (PC) and instructions for pairing
+		/*// Barcode image (PC) and instructions for pairing
 		JLabel qr_pc = new JLabel("");
 		mnPc.add(qr_pc);
 		Image pc_img = new ImageIcon(this.getClass().getResource("/pcPairing.png")).getImage();
-		qr_pc.setIcon(new ImageIcon(pc_img));
+		qr_pc.setIcon(new ImageIcon(pc_img));*/
 		
 		// Menu item MAC to pair QR with MAC
 		JMenu mnMac = new JMenu("MAC");
 		mnMac.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnPairing.add(mnMac);
 		
-		// Barcode image (MAC) and instructions for pairing
+		/*// Barcode image (MAC) and instructions for pairing
 		JLabel qr_mac = new JLabel("");
 		mnMac.add(qr_mac);
-		Image mac_img = new ImageIcon(this.getClass().getResource("/macPairing.PNG")).getImage();
+		Image mac_img = new ImageIcon(this.getClass().getResource("../img/macPairing.PNG")).getImage();
 		qr_mac.setIcon(new ImageIcon(mac_img));
+		*/
 		
 		// Drop menu for selection of different QR scan modes
 		JMenu mnScanMode = new JMenu("Scan Mode");
@@ -183,22 +195,24 @@ public class GUI {
 		mnAutomatic.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnScanMode.add(mnAutomatic);
 		
-		// Barcode image and instructions
+		/*// Barcode image and instructions
 		JLabel autoScan = new JLabel("");
 		mnAutomatic.add(autoScan);
 		Image autoscan_img = new ImageIcon(this.getClass().getResource("/autoScan.PNG")).getImage();
 		autoScan.setIcon(new ImageIcon(autoscan_img));
+		*/
 		
 		// Drop menu for inventory scan settings of QR scanner
 		JMenu mnManual = new JMenu("Inventory");
 		mnManual.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnScanMode.add(mnManual);
 		
-		// Instructions and barcode images for inventory mode of QR
+		/*// Instructions and barcode images for inventory mode of QR
 		JLabel inventoryScan = new JLabel("");
 		mnManual.add(inventoryScan);
 		Image inventory_img = new ImageIcon(this.getClass().getResource("/inventoryScan.PNG")).getImage();
 		inventoryScan.setIcon(new ImageIcon(inventory_img));
+		*/
 		
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -322,13 +336,14 @@ public class GUI {
 		mntmWirelessModule.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnRfid.add(mntmWirelessModule);
 		
-		// Setup logo for top of screen and resize appropriately
+		/*// Setup logo for top of screen and resize appropriately
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
 		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
 		Image scaledimg = img.getScaledInstance((int)screenWidth/2, (int)screenHeight/5,  java.awt.Image.SCALE_SMOOTH);
 		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
+		*/
 		
 		JPanel panel = new JPanel();
 		frmBit.getContentPane().add(panel, BorderLayout.CENTER);
@@ -353,6 +368,29 @@ public class GUI {
 		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnQuery = new JButton("QUERY DATABASE");
+		btnQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Get blade id from textfield and query the database for blade info
+				try{
+					id = textField.getText();
+				}catch (NullPointerException e){
+					// Throw a visual error to scan for an id
+					e.printStackTrace();
+				}
+				try {
+					results = QueryController.run(id);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				// Create new window to enter data for submission to database
+				ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
+				querydb.setVisible(true);
+				// Set location offset from main frame
+				screenX = frmBit.getX();
+				screenY = frmBit.getY();
+				querydb.setLocation(screenX + 100, screenY + 100);
+			}
+		});
 		btnQuery.setBackground(Color.LIGHT_GRAY);
 		btnQuery.setIcon(null);
 		btnQuery.setHorizontalTextPosition(SwingConstants.RIGHT);
