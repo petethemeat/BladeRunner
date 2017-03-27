@@ -159,7 +159,7 @@ public class GUI {
 		// Barcode image (PC) and instructions for pairing
 		JLabel qr_pc = new JLabel("");
 		mnPc.add(qr_pc);
-		Image pc_img = new ImageIcon(this.getClass().getResource("/pcPairing.png")).getImage();
+		Image pc_img = new ImageIcon(this.getClass().getResource("/res/pcPairing.png")).getImage();
 		qr_pc.setIcon(new ImageIcon(pc_img));
 		
 		// Menu item MAC to pair QR with MAC
@@ -170,7 +170,7 @@ public class GUI {
 		// Barcode image (MAC) and instructions for pairing
 		JLabel qr_mac = new JLabel("");
 		mnMac.add(qr_mac);
-		Image mac_img = new ImageIcon(this.getClass().getResource("/macPairing.PNG")).getImage();
+		Image mac_img = new ImageIcon(this.getClass().getResource("/res/macPairing.PNG")).getImage();
 		qr_mac.setIcon(new ImageIcon(mac_img));
 		
 		// Drop menu for selection of different QR scan modes
@@ -186,7 +186,7 @@ public class GUI {
 		// Barcode image and instructions
 		JLabel autoScan = new JLabel("");
 		mnAutomatic.add(autoScan);
-		Image autoscan_img = new ImageIcon(this.getClass().getResource("/autoScan.PNG")).getImage();
+		Image autoscan_img = new ImageIcon(this.getClass().getResource("/res/autoScan.PNG")).getImage();
 		autoScan.setIcon(new ImageIcon(autoscan_img));
 		
 		// Drop menu for inventory scan settings of QR scanner
@@ -197,7 +197,7 @@ public class GUI {
 		// Instructions and barcode images for inventory mode of QR
 		JLabel inventoryScan = new JLabel("");
 		mnManual.add(inventoryScan);
-		Image inventory_img = new ImageIcon(this.getClass().getResource("/inventoryScan.PNG")).getImage();
+		Image inventory_img = new ImageIcon(this.getClass().getResource("/res/inventoryScan.PNG")).getImage();
 		inventoryScan.setIcon(new ImageIcon(inventory_img));
 		
 		
@@ -213,7 +213,7 @@ public class GUI {
 				try {
 				    File file = File.createTempFile("QRManual", ".pdf");
 			        file.deleteOnExit();
-			        InputStream resource = getClass().getResourceAsStream("/QRManual.pdf");
+			        InputStream resource = getClass().getResourceAsStream("/res/QRManual.pdf");
 			        Path temp = file.toPath();
 			        
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -325,7 +325,7 @@ public class GUI {
 		// Setup logo for top of screen and resize appropriately
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("/res/logo.png")).getImage();
 		Image scaledimg = img.getScaledInstance((int)screenWidth/2, (int)screenHeight/5,  java.awt.Image.SCALE_SMOOTH);
 		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
