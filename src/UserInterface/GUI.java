@@ -167,23 +167,23 @@ public class GUI {
 		mnPc.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnPairing.add(mnPc);
 		
-		/*// Barcode image (PC) and instructions for pairing
+		// Barcode image (PC) and instructions for pairing
 		JLabel qr_pc = new JLabel("");
 		mnPc.add(qr_pc);
-		Image pc_img = new ImageIcon(this.getClass().getResource("/pcPairing.png")).getImage();
-		qr_pc.setIcon(new ImageIcon(pc_img));*/
-		
+		Image pc_img = new ImageIcon(this.getClass().getResource("/res/pcPairing.png")).getImage();
+		qr_pc.setIcon(new ImageIcon(pc_img));
+
+	
 		// Menu item MAC to pair QR with MAC
 		JMenu mnMac = new JMenu("MAC");
 		mnMac.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnPairing.add(mnMac);
 		
-		/*// Barcode image (MAC) and instructions for pairing
+		// Barcode image (MAC) and instructions for pairing
 		JLabel qr_mac = new JLabel("");
 		mnMac.add(qr_mac);
-		Image mac_img = new ImageIcon(this.getClass().getResource("../img/macPairing.PNG")).getImage();
+		Image mac_img = new ImageIcon(this.getClass().getResource("/res/macPairing.PNG")).getImage();
 		qr_mac.setIcon(new ImageIcon(mac_img));
-		*/
 		
 		// Drop menu for selection of different QR scan modes
 		JMenu mnScanMode = new JMenu("Scan Mode");
@@ -195,24 +195,24 @@ public class GUI {
 		mnAutomatic.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnScanMode.add(mnAutomatic);
 		
-		/*// Barcode image and instructions
+		// Barcode image and instructions
 		JLabel autoScan = new JLabel("");
 		mnAutomatic.add(autoScan);
-		Image autoscan_img = new ImageIcon(this.getClass().getResource("/autoScan.PNG")).getImage();
+		Image autoscan_img = new ImageIcon(this.getClass().getResource("/res/autoScan.PNG")).getImage();
 		autoScan.setIcon(new ImageIcon(autoscan_img));
-		*/
+		
 		
 		// Drop menu for inventory scan settings of QR scanner
 		JMenu mnManual = new JMenu("Inventory");
 		mnManual.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnScanMode.add(mnManual);
 		
-		/*// Instructions and barcode images for inventory mode of QR
+		// Instructions and barcode images for inventory mode of QR
 		JLabel inventoryScan = new JLabel("");
 		mnManual.add(inventoryScan);
-		Image inventory_img = new ImageIcon(this.getClass().getResource("/inventoryScan.PNG")).getImage();
+		Image inventory_img = new ImageIcon(this.getClass().getResource("/res/inventoryScan.PNG")).getImage();
 		inventoryScan.setIcon(new ImageIcon(inventory_img));
-		*/
+		
 		
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -227,7 +227,7 @@ public class GUI {
 				try {
 				    File file = File.createTempFile("QRManual", ".pdf");
 			        file.deleteOnExit();
-			        InputStream resource = getClass().getResourceAsStream("/QRManual.pdf");
+			        InputStream resource = getClass().getResourceAsStream("/res/QRManual.pdf");
 			        Path temp = file.toPath();
 			        
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -260,7 +260,7 @@ public class GUI {
 			        file.deleteOnExit();
 			        // Extract file from its location 
 			        // Get the path for copying to
-			        InputStream resource = getClass().getResourceAsStream("/tm4c123.pdf");
+			        InputStream resource = getClass().getResourceAsStream("/res/tm4c123.pdf");
 			        Path temp = file.toPath();
 			        // Copy original to temporary for display on desktop
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -289,7 +289,7 @@ public class GUI {
 			        file.deleteOnExit();
 			        // Extract file from its location 
 			        // Get the path for copying to
-			        InputStream resource = getClass().getResourceAsStream("/MFRC522.pdf");
+			        InputStream resource = getClass().getResourceAsStream("/res/MFRC522.pdf");
 			        Path temp = file.toPath();
 			        // Copy original to temporary for display on desktop
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -318,7 +318,7 @@ public class GUI {
 			        file.deleteOnExit();
 			        // Extract file from its location 
 			        // Get the path for copying to
-			        InputStream resource = getClass().getResourceAsStream("/ESP8266.pdf");
+			        InputStream resource = getClass().getResourceAsStream("/res/ESP8266.pdf");
 			        Path temp = file.toPath();
 			        // Copy original to temporary for display on desktop
 			        Files.copy(resource, temp, StandardCopyOption.REPLACE_EXISTING);
@@ -336,14 +336,14 @@ public class GUI {
 		mntmWirelessModule.setFont(new Font("Segoe UI", Font.PLAIN, 26));
 		mnRfid.add(mntmWirelessModule);
 		
-		/*// Setup logo for top of screen and resize appropriately
+		// Setup logo for top of screen and resize appropriately
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/logo.png")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("/res/logo.png")).getImage();
 		Image scaledimg = img.getScaledInstance((int)screenWidth/2, (int)screenHeight/5,  java.awt.Image.SCALE_SMOOTH);
 		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
-		*/
+		
 		
 		JPanel panel = new JPanel();
 		frmBit.getContentPane().add(panel, BorderLayout.CENTER);

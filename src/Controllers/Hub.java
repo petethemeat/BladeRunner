@@ -16,11 +16,12 @@ public class Hub {
 	
 	public final static BladeLogger logger = new BladeLogger();
 	
+	private static String[] fields;
+	
 	public static void start()
 	{
 		Properties prop = new Properties();
 		InputStream input;
-		
 		try
 		{
 			input = new FileInputStream("config.properties");
@@ -38,6 +39,10 @@ public class Hub {
 		String dbName = prop.getProperty("dbname");
 		String table = prop.getProperty("dbtable");
 		
+		String field = prop.getProperty("dbfields");
+		
+		fields = field.split(",");
+		
 		source = new dbSource(user, password, serverName, dbName, table);
 		
 	}
@@ -47,33 +52,10 @@ public class Hub {
 		return source;
 	}
 	
-	public static void main(String args[])
+	public static String[] getFields()
 	{
-		Hub.start();
-		Hub.logger.info("Blade runner test is starting");
-	
-		
-		String[] fields2 = {"id", "blade_size", "start_date", "hours_used"};
-		String[] values2 = {"35", "11", "2012-08-06 08:11:12", "30"};
-		
-		
-		try
-		{
-			AddController.run(fields2, values2);
-			
-			String[] results = QueryController.run("20");
-			
-			for(String result : results)
-			{
-				System.out.println(result);
-			}
-		}
-		catch(SQLException e)
-		{
-			
-		}
-		
-		
+		return fields;
 	}
+
 
 }
