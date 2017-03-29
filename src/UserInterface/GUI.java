@@ -384,6 +384,8 @@ public class GUI {
 						errorMessage.setVisible(false);
 						try {
 							results = QueryController.run(id);
+							// Need to show some visual error if blade is not in the database
+						
 						} catch (SQLException e) {
 							e.printStackTrace();
 						}

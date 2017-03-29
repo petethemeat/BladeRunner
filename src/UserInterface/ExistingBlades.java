@@ -17,6 +17,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class ExistingBlades extends JFrame implements Runnable{
@@ -40,9 +41,9 @@ public class ExistingBlades extends JFrame implements Runnable{
 	 */
 	public ExistingBlades(double width, double height, String[] results) {
 		this.setTitle("Blade Info");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		this.setSize((int)width/4, (int)height/4);
+		this.setSize((int)width/3, (int)height/4);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		// Setup of panel to accept and layout buttons in bottom of new window
@@ -107,9 +108,10 @@ public class ExistingBlades extends JFrame implements Runnable{
 		buttonpanel.add(btnClose);
 		
 		// Setup of panel to parse and populate window with blade information
+		// Need to setup a loop to take care of this in case they add to config file
 		JPanel infopanel = new JPanel();
 		getContentPane().add(infopanel, BorderLayout.CENTER);
-		infopanel.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][]"));
+		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][][][][][][][]"));
 		
 		JLabel lblBladeId = new JLabel("Blade ID :");
 		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -122,6 +124,11 @@ public class ExistingBlades extends JFrame implements Runnable{
 		bladeID.setColumns(10);
 		bladeID.setText(results[0]);
 		
+		JLabel lblIDFormat = new JLabel("Integer Value");
+		lblIDFormat.setForeground(Color.RED);
+		lblIDFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lblIDFormat, "cell 4 1");
+		
 		JLabel lblBladeSize = new JLabel("Blade Size :");
 		lblBladeSize.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblBladeSize, "cell 1 3");
@@ -132,6 +139,11 @@ public class ExistingBlades extends JFrame implements Runnable{
 		infopanel.add(bladeSize, "cell 3 3,growx");
 		bladeSize.setColumns(10);
 		bladeSize.setText(results[1]);
+		
+		JLabel lbSizeFormat = new JLabel("Integer Value");
+		lbSizeFormat.setForeground(Color.RED);
+		lbSizeFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lbSizeFormat, "cell 4 3");
 		
 		JLabel lblStartDate = new JLabel("Start Date :");
 		lblStartDate.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -144,6 +156,11 @@ public class ExistingBlades extends JFrame implements Runnable{
 		startDate.setColumns(10);
 		startDate.setText(results[2]);
 		
+		JLabel lbDateFormat = new JLabel("YYYY-MM-DD HH:MM:SS.S");
+		lbDateFormat.setForeground(Color.RED);
+		lbDateFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lbDateFormat, "cell 4 5");
+		
 		JLabel lblHoursUsed = new JLabel("Hours Used :");
 		lblHoursUsed.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblHoursUsed, "cell 1 7");
@@ -154,6 +171,11 @@ public class ExistingBlades extends JFrame implements Runnable{
 		infopanel.add(hoursUsed, "cell 3 7,growx");
 		hoursUsed.setColumns(10);
 		hoursUsed.setText(results[3]);
+		
+		JLabel lbHoursFormat = new JLabel("Integer Value");
+		lbHoursFormat.setForeground(Color.RED);
+		lbHoursFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lbHoursFormat, "cell 4 7");
 		
 		
 	}
