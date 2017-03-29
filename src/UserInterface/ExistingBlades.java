@@ -7,11 +7,15 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.border.BevelBorder;
+
+import Controllers.DeleteController;
+
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -76,6 +80,16 @@ public class ExistingBlades extends JFrame implements Runnable{
 		buttonpanel.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("DELETE");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Call on delete controller to delete id from database
+				try {
+					DeleteController.run(bladeID.getText());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnDelete.setFocusPainted(false);
 		btnDelete.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDelete.setFont(new Font("Arial", Font.PLAIN, 19));

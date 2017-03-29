@@ -402,7 +402,9 @@ public class GUI {
 						errorMessage.setVisible(true);
 					}
 				}
-				else{}
+				else{
+					errorMessage.setVisible(true);
+				}
 				
 			}
 		});
