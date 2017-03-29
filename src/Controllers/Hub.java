@@ -17,6 +17,8 @@ public class Hub {
 	
 	private static String[] fields;
 	
+	private static int port;
+	
 	public static void start()
 	{
 		Properties prop = new Properties();
@@ -44,6 +46,8 @@ public class Hub {
 		
 		source = new dbSource(user, password, serverName, dbName, table);
 		
+		port = Integer.parseInt(prop.getProperty("portnum"));
+		
 	}
 	
 	public static dbSource getSource()
@@ -56,5 +60,9 @@ public class Hub {
 		return fields;
 	}
 
+	public static int getPort()
+	{
+		return port;
+	}
 
 }
