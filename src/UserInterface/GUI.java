@@ -50,8 +50,6 @@ public class GUI {
 	private JLabel errorMessage;
 	private double screenWidth;
 	private double screenHeight;
-	private int screenX;
-	private int screenY;
 	private String[] results;
 	private String id;
 
@@ -113,7 +111,7 @@ public class GUI {
 		mntmBlade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Create new window to enter data for submission to database
-				NewBlade newInventory = new NewBlade();
+				NewBlade newInventory = new NewBlade(screenWidth, screenHeight);
 				newInventory.setVisible(true);
 				newInventory.setLocationRelativeTo(frmBit);
 			}
@@ -393,10 +391,8 @@ public class GUI {
 						// Create new window to enter data for submission to database
 						ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
 						querydb.setVisible(true);
-						// Set location offset from main frame
-						screenX = frmBit.getX();
-						screenY = frmBit.getY();
-						querydb.setLocation(screenX + 100, screenY + 100);
+						// Set location of window centered to frame
+						querydb.setLocationRelativeTo(frmBit);
 					}
 					else{
 						errorMessage.setVisible(true);
