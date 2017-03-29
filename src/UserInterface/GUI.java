@@ -39,10 +39,15 @@ import Controllers.QueryController;
 
 import java.awt.Dimension;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import java.awt.Component;
+
 public class GUI {
 
 	private JFrame frmBit;
 	private JTextField textField;
+	private JLabel errorMessage;
 	private double screenWidth;
 	private double screenHeight;
 	private int screenX;
@@ -344,63 +349,86 @@ public class GUI {
 		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
 		
-		
+		// Added panel for a border layout below the logo to place text and label at north and buttons/messages at center
 		JPanel panel = new JPanel();
 		frmBit.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, BorderLayout.NORTH);
-		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 50));
+		// Add a panel to border layout north with flow layout to place label and textfield for blade id
+		JPanel pnlBladeID = new JPanel();
+		panel.add(pnlBladeID, BorderLayout.NORTH);
+		pnlBladeID.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 50));
 		
+		// Create and place blade id label and text field in newest panel
 		JLabel lblBladeId = new JLabel("Blade ID :");
 		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 40));
-		panel_1.add(lblBladeId);
+		pnlBladeID.add(lblBladeId);
 		
-		textField = new JTextField();
+		textField = new JTextField(null);
 		textField.setFont(new Font("Arial", Font.PLAIN, 40));
-		panel_1.add(textField);
+		pnlBladeID.add(textField);
 		textField.setColumns(20);
 		textField.setEditable(false);
 		
-		JPanel panel_2 = new JPanel();
-		panel.add(panel_2, BorderLayout.CENTER);
-		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		// Add panel to the center border layout for placement of query button and error message popups
+		JPanel pnlButton = new JPanel();
+		pnlButton.setFont(new Font("Arial", Font.PLAIN, 21));
+		panel.add(pnlButton, BorderLayout.CENTER);
 		
 		JButton btnQuery = new JButton("QUERY DATABASE");
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get blade id from textfield and query the database for blade info
-				try{
+				if(textField.isEditable()){
 					id = textField.getText();
-				}catch (NullPointerException e){
-					// Throw a visual error to scan for an id
-					e.printStackTrace();
+					if(!id.equals("")){
+						// Hide error message if they put a value in the textfield
+						errorMessage.setVisible(false);
+						try {
+							results = QueryController.run(id);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						
+						// Create new window to enter data for submission to database
+						ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
+						querydb.setVisible(true);
+						// Set location offset from main frame
+						screenX = frmBit.getX();
+						screenY = frmBit.getY();
+						querydb.setLocation(screenX + 100, screenY + 100);
+					}
+					else{
+						errorMessage.setVisible(true);
+					}
 				}
-				try {
-					results = QueryController.run(id);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				// Create new window to enter data for submission to database
-				ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
-				querydb.setVisible(true);
-				// Set location offset from main frame
-				screenX = frmBit.getX();
-				screenY = frmBit.getY();
-				querydb.setLocation(screenX + 100, screenY + 100);
+				else{}
+				
 			}
 		});
+		pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.Y_AXIS));
 		btnQuery.setBackground(Color.LIGHT_GRAY);
 		btnQuery.setIcon(null);
-		btnQuery.setHorizontalTextPosition(SwingConstants.RIGHT);
+		btnQuery.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnQuery.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnQuery.setPreferredSize(new Dimension(300, 60));
 		btnQuery.setMaximumSize(new Dimension(400, 80));
 		btnQuery.setFocusPainted(false);
 		btnQuery.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnQuery.setFont(new Font("Arial", Font.PLAIN, 30));
-		panel_2.add(btnQuery);
+		pnlButton.add(btnQuery);
+		pnlButton.add(Box.createVerticalStrut(10));
+		
+		// Throw a visual error to scan for an id
+		errorMessage = new JLabel("Enter ID");
+		errorMessage.setVisible(false);
+		errorMessage.setForeground(Color.RED);
+		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		errorMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+		errorMessage.setHorizontalTextPosition(SwingConstants.CENTER);
+		errorMessage.setFont(new Font("Arial", Font.PLAIN, 30));
+		frmBit.setSize(frmBit.getWidth(), frmBit.getHeight() + 50);
+		pnlButton.add(errorMessage);
 		
 	}
-
 }
