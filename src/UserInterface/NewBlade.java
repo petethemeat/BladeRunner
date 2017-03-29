@@ -52,7 +52,9 @@ public class NewBlade extends JFrame implements Runnable{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String date = CurrentDate.getCurrentDate();
-				startDate.setText(date);
+				// Append zero to end of seconds to fit database format
+				String appendeddate = date.concat(".0");
+				startDate.setText(appendeddate);
 			}
 			
 		});
