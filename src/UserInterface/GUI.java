@@ -99,15 +99,15 @@ public class GUI {
 		frmBit.setJMenuBar(menuBar);
 		
 		JMenu mnFile = new JMenu("File");
-		mnFile.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnFile.setFont(new Font("Arial", Font.PLAIN, 26));
 		menuBar.add(mnFile);
 		
 		JMenu mnNew = new JMenu("New");
-		mnNew.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnNew.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnFile.add(mnNew);
 		
 		JMenuItem mntmBlade = new JMenuItem("Blade");
-		mntmBlade.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmBlade.setFont(new Font("Arial", Font.PLAIN, 26));
 		mntmBlade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Create new window to enter data for submission to database
@@ -119,7 +119,7 @@ public class GUI {
 		mnNew.add(mntmBlade);
 		
 		JMenuItem mntmClose = new JMenuItem("Close");
-		mntmClose.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmClose.setFont(new Font("Arial", Font.PLAIN, 26));
 		mntmClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
@@ -132,11 +132,11 @@ public class GUI {
 		
 		
 		JMenu mnScan = new JMenu("Scan");
-		mnScan.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnScan.setFont(new Font("Arial", Font.PLAIN, 26));
 		menuBar.add(mnScan);
 		
 		JRadioButtonMenuItem rdbtnmntmQr = new JRadioButtonMenuItem("QR");
-		rdbtnmntmQr.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		rdbtnmntmQr.setFont(new Font("Arial", Font.PLAIN, 26));
 		rdbtnmntmQr.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textField.setEditable(true);
@@ -145,7 +145,7 @@ public class GUI {
 		mnScan.add(rdbtnmntmQr);
 		
 		JRadioButtonMenuItem rdbtnmntmRfid = new JRadioButtonMenuItem("RFID");
-		rdbtnmntmRfid.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		rdbtnmntmRfid.setFont(new Font("Arial", Font.PLAIN, 26));
 		rdbtnmntmRfid.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textField.setEditable(true);
@@ -158,16 +158,16 @@ public class GUI {
 		btngroup.add(rdbtnmntmRfid);
 		
 		JMenu mnSetup = new JMenu("Setup");
-		mnSetup.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnSetup.setFont(new Font("Arial", Font.PLAIN, 26));
 		menuBar.add(mnSetup);
 		
 		JMenu mnPairing = new JMenu("Pairing");
-		mnPairing.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnPairing.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnSetup.add(mnPairing);
 		
 		// Menu item PC to pair QR with PC
 		JMenu mnPc = new JMenu("PC");
-		mnPc.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnPc.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnPairing.add(mnPc);
 		
 		// Barcode image (PC) and instructions for pairing
@@ -179,7 +179,7 @@ public class GUI {
 	
 		// Menu item MAC to pair QR with MAC
 		JMenu mnMac = new JMenu("MAC");
-		mnMac.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnMac.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnPairing.add(mnMac);
 		
 		// Barcode image (MAC) and instructions for pairing
@@ -190,12 +190,12 @@ public class GUI {
 		
 		// Drop menu for selection of different QR scan modes
 		JMenu mnScanMode = new JMenu("Scan Mode");
-		mnScanMode.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnScanMode.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnSetup.add(mnScanMode);
 		
 		// Selection for auto scan mode (scans and displays info)
 		JMenu mnAutomatic = new JMenu("Automatic");
-		mnAutomatic.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnAutomatic.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnScanMode.add(mnAutomatic);
 		
 		// Barcode image and instructions
@@ -207,7 +207,7 @@ public class GUI {
 		
 		// Drop menu for inventory scan settings of QR scanner
 		JMenu mnManual = new JMenu("Inventory");
-		mnManual.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnManual.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnScanMode.add(mnManual);
 		
 		// Instructions and barcode images for inventory mode of QR
@@ -216,14 +216,25 @@ public class GUI {
 		Image inventory_img = new ImageIcon(this.getClass().getResource("/res/inventoryScan.PNG")).getImage();
 		inventoryScan.setIcon(new ImageIcon(inventory_img));
 		
+		JMenuItem mnQRCode = new JMenuItem("QR Code Generation");
+		mnQRCode.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				QRGeneration qrcode = new QRGeneration(screenWidth, screenHeight);
+				qrcode.setVisible(true);
+				qrcode.setLocationRelativeTo(frmBit);
+			}
+		});
+		mnQRCode.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnSetup.add(mnQRCode);
+		
 		
 		
 		JMenu mnHelp = new JMenu("Help");
-		mnHelp.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnHelp.setFont(new Font("Arial", Font.PLAIN, 26));
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmQr_1 = new JMenuItem("QR");
-		mntmQr_1.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmQr_1.setFont(new Font("Arial", Font.PLAIN, 26));
 		mntmQr_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Open file for QR instructions
@@ -249,7 +260,7 @@ public class GUI {
 		mnHelp.add(mntmQr_1);
 		
 		JMenu mnRfid = new JMenu("RFID");
-		mnRfid.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mnRfid.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnHelp.add(mnRfid);
 		
 		JMenuItem mntmTiMicrocontroller = new JMenuItem("TI MicroController");
@@ -278,7 +289,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmTiMicrocontroller.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmTiMicrocontroller.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnRfid.add(mntmTiMicrocontroller);
 		
 		JMenuItem mntmRfidM = new JMenuItem("RFID Module");
@@ -307,7 +318,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmRfidM.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmRfidM.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnRfid.add(mntmRfidM);
 		
 		JMenuItem mntmWirelessModule = new JMenuItem("Wireless Module");
@@ -336,7 +347,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmWirelessModule.setFont(new Font("Segoe UI", Font.PLAIN, 26));
+		mntmWirelessModule.setFont(new Font("Arial", Font.PLAIN, 26));
 		mnRfid.add(mntmWirelessModule);
 		
 		// Setup logo for top of screen and resize appropriately
