@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,7 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 
+import Controllers.AddController;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class NewBlade extends JFrame implements Runnable{
@@ -22,7 +26,9 @@ public class NewBlade extends JFrame implements Runnable{
 	private JTextField bladeSize;
 	private JTextField startDate;
 	private JTextField hoursUsed;
-
+	private String[] fields = {"id", "blade_size", "start_date", "hours_used"}; 
+	private String[] values = new String[4];
+	private JLabel lblNewBladeAdded;
 	
 	/**
 	 * Create the frame.
@@ -42,6 +48,31 @@ public class NewBlade extends JFrame implements Runnable{
 		buttonpanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JButton btnUpdate = new JButton("UPDATE");
+		btnUpdate.addActionListener(new ActionListener() {
+			// Get values from fields and call add controller code
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				values[0] = bladeID.getText();
+				values[1] = bladeSize.getText();
+				values[2] = startDate.getText();
+				values[3] = hoursUsed.getText();
+				try {
+					AddController.run(fields, values);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				// Show a message to relay to customer that new blade was added to database
+				lblNewBladeAdded.setVisible(true);
+				
+//				for(String v : fields){
+//					System.out.println(v);
+//				}
+//				for(String y : values){
+//					System.out.println(y);
+//				}
+			}
+			
+		});
 		btnUpdate.setFocusPainted(false);
 		btnUpdate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnUpdate.setFont(new Font("Arial", Font.PLAIN, 19));
@@ -78,7 +109,7 @@ public class NewBlade extends JFrame implements Runnable{
 		// Need to setup a loop to take care of this in case they add to config file
 		JPanel infopanel = new JPanel();
 		getContentPane().add(infopanel, BorderLayout.CENTER);
-		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][][][][][][][]"));
+		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][][][][][][][][]"));
 		
 		JLabel lblBladeId = new JLabel("Blade ID :");
 		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -143,6 +174,13 @@ public class NewBlade extends JFrame implements Runnable{
 		lbHoursFormat.setForeground(Color.RED);
 		lbHoursFormat.setFont(new Font("Arial", Font.PLAIN, 16));
 		infopanel.add(lbHoursFormat, "cell 4 7");
+		
+		lblNewBladeAdded = new JLabel("New Blade Added to Database");
+		lblNewBladeAdded.setForeground(Color.RED);
+		lblNewBladeAdded.setVisible(false);
+		lblNewBladeAdded.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblNewBladeAdded.setHorizontalAlignment(SwingConstants.CENTER);
+		infopanel.add(lblNewBladeAdded, "cell 3 8");
 		
 		
 	}

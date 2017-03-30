@@ -1,24 +1,30 @@
 package UserInterface;
 
-import javax.swing.JFrame;
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.SwingConstants;
-import javax.swing.JPanel;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JComboBox;
-import java.awt.Dimension;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import java.awt.Color;
+
+import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class QRGeneration extends JFrame implements Runnable{
-
+	JComboBox<String> comboSize;
+	JComboBox<String> comboError;
+	JComboBox<String> comboEncoding;
 
 	/**
 	 * Create the application.
@@ -26,6 +32,7 @@ public class QRGeneration extends JFrame implements Runnable{
 	public QRGeneration(double width, double height) {
 		this.setTitle("QR Code Generation");
 		this.setSize((int)width/3, (int)height/2);
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
@@ -34,77 +41,116 @@ public class QRGeneration extends JFrame implements Runnable{
 		lblPreview.setFont(new Font("Arial", Font.PLAIN, 24));
 		getContentPane().add(lblPreview, BorderLayout.NORTH);
 		
-		JPanel panelInfo = new JPanel();
-		getContentPane().add(panelInfo, BorderLayout.SOUTH);
-		panelInfo.setLayout(new MigLayout("align 50% 50%", "[][][][grow][][grow]", "[][][][]"));
+		JPanel infopanel = new JPanel();
+		infopanel.setPreferredSize(new Dimension(10, 200));
+		getContentPane().add(infopanel, BorderLayout.SOUTH);
+		infopanel.setLayout(new BorderLayout(0, 0));
+		
+		// Setup panel for placing buttons
+		JPanel buttonpanel = new JPanel();
+		buttonpanel.setSize(new Dimension(100, 100));
+		buttonpanel.setMinimumSize(new Dimension(10, 200));
+		infopanel.add(buttonpanel, BorderLayout.SOUTH);
+		GridBagLayout gbl_buttonpanel = new GridBagLayout();
+		gbl_buttonpanel.columnWidths = new int[]{0};
+		gbl_buttonpanel.rowHeights = new int[]{0, 41};
+		gbl_buttonpanel.columnWeights = new double[]{Double.MIN_VALUE};
+		gbl_buttonpanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		buttonpanel.setLayout(gbl_buttonpanel);
+		
+		// Add buttons and events for all buttons
+		JButton generate = new JButton("GENERATE");
+		generate.addActionListener(new ActionListener() {
+			// Pull info from menus and run generation code to populate image panel with QR
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String size = (String) comboSize.getSelectedItem();
+				size = size.replace("\"", "");
+				Integer qrsize = Integer.parseInt(size);
+				String error = (String) comboError.getSelectedItem();
+				error = error.replace("%", "");
+				Integer qrerror = Integer.parseInt(error);
+				String encoding = (String) comboEncoding.getSelectedItem();
+				// Get result from generation code
+				System.out.print(qrsize);
+				System.out.print(qrerror + encoding);
+			}
+			
+		});
+		generate.setFont(new Font("Arial", Font.PLAIN, 26));
+		generate.setFocusPainted(false);
+		generate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		GridBagConstraints gbc_generate = new GridBagConstraints();
+		gbc_generate.insets = new Insets(0, 0, 5, 5);
+		gbc_generate.gridx = 0;
+		gbc_generate.gridy = 0;
+		buttonpanel.add(generate, gbc_generate);
+		
+		
+		JButton close = new JButton("CLOSE");
+		close.addActionListener(new ActionListener() {
+			// Close window upon selection of close button
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+			
+		});
+		close.setFont(new Font("Arial", Font.PLAIN, 26));
+		close.setFocusPainted(false);
+		close.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		GridBagConstraints gbc_close = new GridBagConstraints();
+		gbc_close.insets = new Insets(0, 0, 0, 5);
+		gbc_close.gridx = 0;
+		gbc_close.gridy = 1;
+		buttonpanel.add(close, gbc_close);
+		
+		
+		// Setup panel for all dropdown selections
+		JPanel dropdownpanel = new JPanel();
+		infopanel.add(dropdownpanel, BorderLayout.CENTER);
+		dropdownpanel.setLayout(new MigLayout("align 50% 50%", "[][][][][]", "[]"));
 		
 		JLabel lblSize = new JLabel("Size :");
 		lblSize.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblSize.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSize.setFont(new Font("Arial", Font.PLAIN, 20));
-		panelInfo.add(lblSize, "cell 4 0,alignx left");
+		dropdownpanel.add(lblSize, "cell 4 0");
 		
-		JComboBox<String> comboSize = new JComboBox<String>();
+		
 		// Add items to combobox
-		comboSize.addItem("1\"");
-		comboSize.addItem("2\"");
-		comboSize.addItem("3\"");
-		comboSize.addItem("4\"");
+		String[] sizes = {"1\"", "2\"", "3\"", "4\""};
+		comboSize = new JComboBox<String>(sizes);
 		comboSize.setPreferredSize(new Dimension(100, 29));
-		comboSize.setMaximumRowCount(15);
 		comboSize.setFont(new Font("Arial", Font.PLAIN, 20));
-		panelInfo.add(comboSize, "flowy,cell 5 0");
+		dropdownpanel.add(comboSize, "cell 5 0");
 		
 		JLabel lblError = new JLabel("Error :");
 		lblError.setHorizontalAlignment(SwingConstants.CENTER);
 		lblError.setFont(new Font("Arial", Font.PLAIN, 20));
-		panelInfo.add(lblError, "flowy,cell 4 1");
+		dropdownpanel.add(lblError, "cell 4 1");
 		
-		JComboBox<String> comboError = new JComboBox<String>();
-		comboError.addItem("7%");
-		comboError.addItem("15%");
-		comboError.addItem("25%");
-		comboError.addItem("30%");
+		String[] errors = {"5%", "10%", "15%", "30%"};
+		comboError = new JComboBox<String>(errors);
 		comboError.setFont(new Font("Arial", Font.PLAIN, 20));
 		comboError.setPreferredSize(new Dimension(100, 29));
-		panelInfo.add(comboError, "flowy,cell 5 1");
+		dropdownpanel.add(comboError, "cell 5 1");
 		
 		JLabel lblEncoding = new JLabel("Encoding :");
 		lblEncoding.setHorizontalTextPosition(SwingConstants.LEADING);
 		lblEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
-		panelInfo.add(lblEncoding, "flowy,cell 4 2");
+		dropdownpanel.add(lblEncoding, "cell 4 2");
 		
-		JComboBox<String> comboEncoding = new JComboBox<String>();
-		comboEncoding.addItem("Alphanumeric");
-		comboEncoding.addItem("Manchester");
+		String[] encodings = {"Alphanumeric", "Binary"};
+		comboEncoding = new JComboBox<String>(encodings);
 		comboEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
 		comboEncoding.setPreferredSize(new Dimension(100, 29));
-		panelInfo.add(comboEncoding, "flowy,cell 5 2");
+		dropdownpanel.add(comboEncoding, "cell 5 2");
 		
-		JButton btnGenerate = new JButton("GENERATE");
-		btnGenerate.setFocusPainted(false);
-		btnGenerate.setFont(new Font("Arial", Font.PLAIN, 24));
-		btnGenerate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnGenerate.setHorizontalTextPosition(SwingConstants.CENTER);
-		panelInfo.add(btnGenerate, "cell 4 3");
-		
-		JButton btnClose = new JButton("CLOSE");
-		btnClose.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}	
-		});
-		btnClose.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnClose.setFocusPainted(false);
-		btnClose.setFont(new Font("Arial", Font.PLAIN, 24));
-		panelInfo.add(btnClose, "cell 5 3");
 		
 		JPanel imagepanel = new JPanel();
 		imagepanel.setBackground(Color.WHITE);
 		getContentPane().add(imagepanel, BorderLayout.CENTER);
-		
 		
 	}
 
