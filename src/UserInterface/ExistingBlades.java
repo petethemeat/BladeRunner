@@ -67,13 +67,14 @@ public class ExistingBlades extends JFrame implements Runnable{
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(bladeID.isEditable() && bladeSize.isEditable() && startDate.isEditable() && hoursUsed.isEditable()){
-					bladeID.setEditable(false);
 					bladeSize.setEditable(false);
 					startDate.setEditable(false);
 					hoursUsed.setEditable(false);
 				}
 				else{
-					bladeID.setEditable(true);
+					// Make updated message dissapear since they are choosing to re-edit
+					lblEdited.setVisible(false);
+					// Set fields to editable for customer to change values
 					bladeSize.setEditable(true);
 					startDate.setEditable(true);
 					hoursUsed.setEditable(true);
@@ -98,6 +99,10 @@ public class ExistingBlades extends JFrame implements Runnable{
 					e.printStackTrace();
 				}
 				lblEdited.setVisible(true);
+				// Set all fields to uneditable after updating blade
+				bladeSize.setEditable(false);
+				startDate.setEditable(false);
+				hoursUsed.setEditable(false);
 			}
 			
 		});
