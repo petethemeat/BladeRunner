@@ -30,6 +30,17 @@ public class NewBlade extends JFrame implements Runnable{
 	private String[] values = new String[4];
 	private JLabel lblNewBladeAdded;
 	
+	
+	@Override
+	public void run() {
+		try {
+			this.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * Create the frame.
 	 */
@@ -47,8 +58,8 @@ public class NewBlade extends JFrame implements Runnable{
 		getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 		buttonpanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JButton btnUpdate = new JButton("UPDATE");
-		btnUpdate.addActionListener(new ActionListener() {
+		JButton btnAdd = new JButton("ADD");
+		btnAdd.addActionListener(new ActionListener() {
 			// Get values from fields and call add controller code
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -63,20 +74,13 @@ public class NewBlade extends JFrame implements Runnable{
 				}
 				// Show a message to relay to customer that new blade was added to database
 				lblNewBladeAdded.setVisible(true);
-				
-//				for(String v : fields){
-//					System.out.println(v);
-//				}
-//				for(String y : values){
-//					System.out.println(y);
-//				}
 			}
 			
 		});
-		btnUpdate.setFocusPainted(false);
-		btnUpdate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnUpdate.setFont(new Font("Arial", Font.PLAIN, 19));
-		buttonpanel.add(btnUpdate);
+		btnAdd.setFocusPainted(false);
+		btnAdd.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnAdd.setFont(new Font("Arial", Font.PLAIN, 19));
+		buttonpanel.add(btnAdd);
 		
 		JButton btnDate = new JButton("GET DATE");
 		btnDate.addActionListener(new ActionListener() {
@@ -109,7 +113,7 @@ public class NewBlade extends JFrame implements Runnable{
 		// Need to setup a loop to take care of this in case they add to config file
 		JPanel infopanel = new JPanel();
 		getContentPane().add(infopanel, BorderLayout.CENTER);
-		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][][][][][][][][]"));
+		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][grow][][grow][][grow][][grow][grow]"));
 		
 		JLabel lblBladeId = new JLabel("Blade ID :");
 		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -180,20 +184,9 @@ public class NewBlade extends JFrame implements Runnable{
 		lblNewBladeAdded.setVisible(false);
 		lblNewBladeAdded.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblNewBladeAdded.setHorizontalAlignment(SwingConstants.CENTER);
-		infopanel.add(lblNewBladeAdded, "cell 3 8");
+		infopanel.add(lblNewBladeAdded, "cell 3 8, growx");
 		
 		
 	}
 	
-	
-
-	@Override
-	public void run() {
-		try {
-			this.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 }

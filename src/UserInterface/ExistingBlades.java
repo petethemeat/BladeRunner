@@ -9,10 +9,13 @@ import java.awt.Dimension;
 import javax.swing.border.BevelBorder;
 
 import Controllers.DeleteController;
+import Controllers.UpdateController;
 
 import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -21,10 +24,15 @@ import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class ExistingBlades extends JFrame implements Runnable{
+	private JPanel infopanel;
 	private JTextField bladeID;
 	private JTextField bladeSize;
 	private JTextField startDate;
 	private JTextField hoursUsed;
+	private JLabel lblEdited;
+	private String id;
+	private String[] fields = {"blade_size", "start_date", "hours_used"}; 
+	private String[] values = new String[3];
 
 		
 	public void run() {
@@ -45,6 +53,9 @@ public class ExistingBlades extends JFrame implements Runnable{
 		
 		this.setSize((int)width/3, (int)height/4);
 		getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		// Initialize bladID string to result[0]
+		id = results[0];
 		
 		// Setup of panel to accept and layout buttons in bottom of new window
 		JPanel buttonpanel = new JPanel();
@@ -75,6 +86,21 @@ public class ExistingBlades extends JFrame implements Runnable{
 		buttonpanel.add(btnEdit);
 		
 		JButton btnUpdate = new JButton("UPDATE");
+		btnUpdate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				values[0] = bladeSize.getText();
+				values[1] = startDate.getText();
+				values[2] = hoursUsed.getText();
+				try {
+					UpdateController.run(id, values, fields);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				lblEdited.setVisible(true);
+			}
+			
+		});
 		btnUpdate.setFocusPainted(false);
 		btnUpdate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnUpdate.setFont(new Font("Arial", Font.PLAIN, 19));
@@ -109,10 +135,11 @@ public class ExistingBlades extends JFrame implements Runnable{
 		
 		// Setup of panel to parse and populate window with blade information
 		// Need to setup a loop to take care of this in case they add to config file
-		JPanel infopanel = new JPanel();
+		infopanel = new JPanel();
 		getContentPane().add(infopanel, BorderLayout.CENTER);
-		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][][][][][][][]"));
+		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][grow][][grow][][grow][grow][grow]"));
 		
+		// Create label, textfield, and format message for blade id
 		JLabel lblBladeId = new JLabel("Blade ID :");
 		lblBladeId.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblBladeId, "cell 1 1");
@@ -129,6 +156,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lblIDFormat.setFont(new Font("Arial", Font.PLAIN, 16));
 		infopanel.add(lblIDFormat, "cell 4 1");
 		
+		// Create label, textfield, and format message for blade size
 		JLabel lblBladeSize = new JLabel("Blade Size :");
 		lblBladeSize.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblBladeSize, "cell 1 3");
@@ -145,6 +173,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lbSizeFormat.setFont(new Font("Arial", Font.PLAIN, 16));
 		infopanel.add(lbSizeFormat, "cell 4 3");
 		
+		// Create label, textfield, and format message for blade start date
 		JLabel lblStartDate = new JLabel("Start Date :");
 		lblStartDate.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblStartDate, "cell 1 5");
@@ -161,6 +190,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lbDateFormat.setFont(new Font("Arial", Font.PLAIN, 16));
 		infopanel.add(lbDateFormat, "cell 4 5");
 		
+		// Create label, textfield, and format message for blade hours used
 		JLabel lblHoursUsed = new JLabel("Hours Used :");
 		lblHoursUsed.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(lblHoursUsed, "cell 1 7");
@@ -176,6 +206,14 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lbHoursFormat.setForeground(Color.RED);
 		lbHoursFormat.setFont(new Font("Arial", Font.PLAIN, 16));
 		infopanel.add(lbHoursFormat, "cell 4 7");
+		
+		// Create label for message relaying blade has been updated when button pressed
+		lblEdited = new JLabel("Blade ID #" + id + " has been updated");
+		lblEdited.setForeground(Color.RED);
+		lblEdited.setVisible(false);
+		lblEdited.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblEdited.setHorizontalAlignment(SwingConstants.CENTER);
+		infopanel.add(lblEdited, "cell 3 8,growx");
 		
 		
 	}

@@ -438,7 +438,6 @@ public class GUI {
 		errorMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
 		errorMessage.setHorizontalTextPosition(SwingConstants.CENTER);
 		errorMessage.setFont(new Font("Arial", Font.PLAIN, 30));
-		frmBit.setSize(frmBit.getWidth(), frmBit.getHeight() + 50);
 		pnlButton.add(errorMessage);
 		
 	}
