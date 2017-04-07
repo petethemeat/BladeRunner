@@ -395,17 +395,17 @@ public class GUI {
 						errorMessage.setVisible(false);
 						try {
 							results = QueryController.run(id);
-							// Need to show some visual error if blade is not in the database
+							// Create new window to enter data for submission to database
+							ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
+							querydb.setVisible(true);
+							// Set location of window centered to frame
+							querydb.setLocationRelativeTo(frmBit);	
 						
 						} catch (SQLException e) {
+							// Pop-up window for error, no such blade exists
+							
 							e.printStackTrace();
 						}
-						
-						// Create new window to enter data for submission to database
-						ExistingBlades querydb = new ExistingBlades(screenWidth, screenHeight, results);
-						querydb.setVisible(true);
-						// Set location of window centered to frame
-						querydb.setLocationRelativeTo(frmBit);
 					}
 					else{
 						errorMessage.setVisible(true);

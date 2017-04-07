@@ -71,9 +71,6 @@ public class QRGeneration extends JFrame implements Runnable{
 				error = error.replace("%", "");
 				Integer qrerror = Integer.parseInt(error);
 				String encoding = (String) comboEncoding.getSelectedItem();
-				// Get result from generation code
-				System.out.print(qrsize);
-				System.out.print(qrerror + encoding);
 			}
 			
 		});
@@ -146,6 +143,11 @@ public class QRGeneration extends JFrame implements Runnable{
 		comboEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
 		comboEncoding.setPreferredSize(new Dimension(100, 29));
 		dropdownpanel.add(comboEncoding, "cell 5 2");
+		
+		JLabel lblCode = new JLabel("Text :");
+		lblCode.setHorizontalTextPosition(SwingConstants.LEADING);
+		lblCode.setFont(new Font("Arial", Font.PLAIN, 20));
+		dropdownpanel.add(lblCode, "cell 4 3");
 		
 		
 		JPanel imagepanel = new JPanel();
