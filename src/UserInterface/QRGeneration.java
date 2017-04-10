@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
@@ -25,6 +26,7 @@ public class QRGeneration extends JFrame implements Runnable{
 	JComboBox<String> comboSize;
 	JComboBox<String> comboError;
 	JComboBox<String> comboEncoding;
+	private JTextField id;
 
 	/**
 	 * Create the application.
@@ -70,7 +72,8 @@ public class QRGeneration extends JFrame implements Runnable{
 				String error = (String) comboError.getSelectedItem();
 				error = error.replace("%", "");
 				Integer qrerror = Integer.parseInt(error);
-				String encoding = (String) comboEncoding.getSelectedItem();
+				String encoding = id.getText();
+				
 			}
 			
 		});
@@ -116,8 +119,13 @@ public class QRGeneration extends JFrame implements Runnable{
 		
 		
 		// Add items to combobox
-		String[] sizes = {"1\"", "2\"", "3\"", "4\""};
-		comboSize = new JComboBox<String>(sizes);
+//		String[] sizes = {"1\"", "2\"", "3\"", "4\""};
+//		comboSize = new JComboBox<String>(sizes);
+		comboSize = new JComboBox<String>();
+		comboSize.addItem("1\"");
+		comboSize.addItem("2\"");
+		comboSize.addItem("3\"");
+		comboSize.addItem("4\"");
 		comboSize.setPreferredSize(new Dimension(100, 29));
 		comboSize.setFont(new Font("Arial", Font.PLAIN, 20));
 		dropdownpanel.add(comboSize, "cell 5 0");
@@ -127,27 +135,39 @@ public class QRGeneration extends JFrame implements Runnable{
 		lblError.setFont(new Font("Arial", Font.PLAIN, 20));
 		dropdownpanel.add(lblError, "cell 4 1");
 		
-		String[] errors = {"5%", "10%", "15%", "30%"};
-		comboError = new JComboBox<String>(errors);
+//		String[] errors = {"5%", "10%", "15%", "30%"};
+//		comboError = new JComboBox<String>(errors);
+		comboError = new JComboBox<String>();
+		comboError.addItem("5%");
+		comboError.addItem("10%");
+		comboError.addItem("15%");
+		comboError.addItem("30%");
 		comboError.setFont(new Font("Arial", Font.PLAIN, 20));
 		comboError.setPreferredSize(new Dimension(100, 29));
 		dropdownpanel.add(comboError, "cell 5 1");
 		
-		JLabel lblEncoding = new JLabel("Encoding :");
-		lblEncoding.setHorizontalTextPosition(SwingConstants.LEADING);
-		lblEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
-		dropdownpanel.add(lblEncoding, "cell 4 2");
+//		JLabel lblEncoding = new JLabel("Encoding :");
+//		lblEncoding.setHorizontalTextPosition(SwingConstants.LEADING);
+//		lblEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
+//		dropdownpanel.add(lblEncoding, "cell 4 2");
+//		
+//		String[] encodings = {"Alphanumeric", "Binary"};
+//		comboEncoding = new JComboBox<String>(encodings);
+//		comboEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
+//		comboEncoding.setPreferredSize(new Dimension(100, 29));
+//		dropdownpanel.add(comboEncoding, "cell 5 2");
 		
-		String[] encodings = {"Alphanumeric", "Binary"};
-		comboEncoding = new JComboBox<String>(encodings);
-		comboEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
-		comboEncoding.setPreferredSize(new Dimension(100, 29));
-		dropdownpanel.add(comboEncoding, "cell 5 2");
-		
+		// Add user area for text to generate as a qr code
 		JLabel lblCode = new JLabel("Text :");
 		lblCode.setHorizontalTextPosition(SwingConstants.LEADING);
 		lblCode.setFont(new Font("Arial", Font.PLAIN, 20));
-		dropdownpanel.add(lblCode, "cell 4 3");
+		dropdownpanel.add(lblCode, "cell 4 2");
+		
+		id = new JTextField(null);
+		id.setFont(new Font("Arial", Font.PLAIN, 20));
+		dropdownpanel.add(id, "cell 5 2");
+		id.setColumns(10);
+		id.setEditable(true);
 		
 		
 		JPanel imagepanel = new JPanel();
