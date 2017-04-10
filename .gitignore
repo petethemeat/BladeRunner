@@ -9,3 +9,8 @@ accesstoken.key
 config.properties
 
 bin
+
+.DS_Store
+.idea
+.BladeRunner.iml
+out
