@@ -4,6 +4,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.glxn.qrgen.core.image.ImageType;
 import net.glxn.qrgen.javase.QRCode;
 
+
 import java.io.*;
 
 
@@ -16,16 +17,14 @@ public class QRGenerator{
     /* This class contains everything necessary to generate QR Codes */
     public int     Size;
     public int     Redundancy;
-    public String  Encoding;
     public String  Text;
     public String  FilePath;
 
-    public QRGenerator(int size, int redundancy, String encoding, String text, String filepath){
+    public QRGenerator(int size, int redundancy,  String text, String filepath){
         /*  Do error handling in the constructor */
         try {
             this.Size = size;
             this.Redundancy = redundancy;
-            this.Encoding = encoding;
             this.Text = text;
             this.FilePath = filepath;
         }
