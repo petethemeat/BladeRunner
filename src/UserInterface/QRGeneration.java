@@ -9,9 +9,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,6 +33,9 @@ public class QRGeneration extends JFrame implements Runnable{
 	JComboBox<String> comboError;
 	JComboBox<String> comboEncoding;
 	private JTextField id;
+	private InputStream qrpath;
+	private String qrname;
+	private byte[] buffer;
 
 	/**
 	 * Create the application.
@@ -55,15 +64,16 @@ public class QRGeneration extends JFrame implements Runnable{
 		infopanel.add(buttonpanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_buttonpanel = new GridBagLayout();
 		gbl_buttonpanel.columnWidths = new int[]{0};
-		gbl_buttonpanel.rowHeights = new int[]{0, 41};
+		gbl_buttonpanel.rowHeights = new int[]{10, 10, 10};
 		gbl_buttonpanel.columnWeights = new double[]{Double.MIN_VALUE};
-		gbl_buttonpanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_buttonpanel.rowWeights = new double[]{0.0, 0.0, 4.9E-324};
 		buttonpanel.setLayout(gbl_buttonpanel);
 		
 		// Add buttons and events for all buttons
 		JButton generate = new JButton("GENERATE");
 		generate.addActionListener(new ActionListener() {
 			// Pull info from menus and run generation code to populate image panel with QR
+			@SuppressWarnings("unused")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String size = (String) comboSize.getSelectedItem();
@@ -73,22 +83,29 @@ public class QRGeneration extends JFrame implements Runnable{
 				error = error.replace("%", "");
 				Integer qrerror = Integer.parseInt(error);
 				String encoding = id.getText();
-				
+				qrpath = new InputStream(QRGenerator.run(qrsize, qrerror, encoding));
+				try {
+					buffer = new byte[qrpath.available()];
+					 qrpath.read(buffer);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			   
 			}
 			
 		});
-		generate.setFont(new Font("Arial", Font.PLAIN, 26));
+		generate.setFont(new Font("Arial", Font.PLAIN, 20));
 		generate.setFocusPainted(false);
 		generate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_generate = new GridBagConstraints();
-		gbc_generate.insets = new Insets(0, 0, 5, 5);
+		gbc_generate.insets = new Insets(0, 0, 5, 0);
 		gbc_generate.gridx = 0;
 		gbc_generate.gridy = 0;
 		buttonpanel.add(generate, gbc_generate);
 		
 		
-		JButton close = new JButton("CLOSE");
-		close.addActionListener(new ActionListener() {
+		JButton cancel = new JButton("CANCEL");
+		cancel.addActionListener(new ActionListener() {
 			// Close window upon selection of close button
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -96,14 +113,44 @@ public class QRGeneration extends JFrame implements Runnable{
 			}
 			
 		});
-		close.setFont(new Font("Arial", Font.PLAIN, 26));
-		close.setFocusPainted(false);
-		close.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		GridBagConstraints gbc_close = new GridBagConstraints();
-		gbc_close.insets = new Insets(0, 0, 0, 5);
-		gbc_close.gridx = 0;
-		gbc_close.gridy = 1;
-		buttonpanel.add(close, gbc_close);
+		
+		JButton save = new JButton("SAVE");
+		save.addActionListener(new ActionListener() {
+			// Close window upon selection of close button
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				 JFileChooser c = new JFileChooser();
+			      // Demonstrate "Save" dialog:
+			      int rVal = c.showSaveDialog(QRGeneration.this);
+			      if (rVal == JFileChooser.APPROVE_OPTION) {
+			    	  qrname = c.getSelectedFile().getName();
+			    	try {
+						qrpath = new FileInputStream(new File(c.getCurrentDirectory().toString() + "\\" + qrname));
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+			      }
+			      if (rVal == JFileChooser.CANCEL_OPTION) {
+			    	c.setVisible(false);
+			      }
+			}
+			
+		});
+		save.setFocusPainted(false);
+		save.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		save.setFont(new Font("Arial", Font.PLAIN, 20));
+		GridBagConstraints gbc_save = new GridBagConstraints();
+		gbc_save.insets = new Insets(0, 0, 5, 0);
+		gbc_save.gridx = 0;
+		gbc_save.gridy = 1;
+		buttonpanel.add(save, gbc_save);
+		cancel.setFont(new Font("Arial", Font.PLAIN, 20));
+		cancel.setFocusPainted(false);
+		cancel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		GridBagConstraints gbc_cancel = new GridBagConstraints();
+		gbc_cancel.gridx = 0;
+		gbc_cancel.gridy = 2;
+		buttonpanel.add(cancel, gbc_cancel);
 		
 		
 		// Setup panel for all dropdown selections
