@@ -12,8 +12,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import Controllers.QRGeneratorController;
 import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
@@ -66,7 +69,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		gbl_buttonpanel.columnWidths = new int[]{0};
 		gbl_buttonpanel.rowHeights = new int[]{10, 10, 10};
 		gbl_buttonpanel.columnWeights = new double[]{Double.MIN_VALUE};
-		gbl_buttonpanel.rowWeights = new double[]{0.0, 0.0, 4.9E-324};
+		gbl_buttonpanel.rowWeights = new double[]{0.0, 0.0, 0.0};
 		buttonpanel.setLayout(gbl_buttonpanel);
 		
 		// Add buttons and events for all buttons
@@ -83,10 +86,16 @@ public class QRGeneration extends JFrame implements Runnable{
 				error = error.replace("%", "");
 				Integer qrerror = Integer.parseInt(error);
 				String encoding = id.getText();
-				qrpath = new InputStream(QRGenerator.run(qrsize, qrerror, encoding));
+				try {
+					qrpath = QRGeneratorController.run(qrsize, encoding);
+				} catch (IllegalArgumentException e2) {
+					e2.printStackTrace();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
 				try {
 					buffer = new byte[qrpath.available()];
-					 qrpath.read(buffer);
+					qrpath.read(buffer);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -98,7 +107,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		generate.setFocusPainted(false);
 		generate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_generate = new GridBagConstraints();
-		gbc_generate.insets = new Insets(0, 0, 5, 0);
+		gbc_generate.insets = new Insets(0, 0, 10, 0);
 		gbc_generate.gridx = 0;
 		gbc_generate.gridy = 0;
 		buttonpanel.add(generate, gbc_generate);
@@ -124,11 +133,18 @@ public class QRGeneration extends JFrame implements Runnable{
 			      int rVal = c.showSaveDialog(QRGeneration.this);
 			      if (rVal == JFileChooser.APPROVE_OPTION) {
 			    	  qrname = c.getSelectedFile().getName();
-			    	try {
-						qrpath = new FileInputStream(new File(c.getCurrentDirectory().toString() + "\\" + qrname));
+			    	  
+					  File targetFile = new File(c.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+				      OutputStream outStream;
+					try {
+						outStream = new FileOutputStream(targetFile);
+						outStream.write(buffer);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
+				      
 			      }
 			      if (rVal == JFileChooser.CANCEL_OPTION) {
 			    	c.setVisible(false);
@@ -140,7 +156,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		save.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		save.setFont(new Font("Arial", Font.PLAIN, 20));
 		GridBagConstraints gbc_save = new GridBagConstraints();
-		gbc_save.insets = new Insets(0, 0, 5, 0);
+		gbc_save.insets = new Insets(0, 0, 10, 0);
 		gbc_save.gridx = 0;
 		gbc_save.gridy = 1;
 		buttonpanel.add(save, gbc_save);
@@ -148,6 +164,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		cancel.setFocusPainted(false);
 		cancel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_cancel = new GridBagConstraints();
+		gbc_cancel.insets = new Insets(0, 0, 10, 0);
 		gbc_cancel.gridx = 0;
 		gbc_cancel.gridy = 2;
 		buttonpanel.add(cancel, gbc_cancel);
@@ -177,32 +194,6 @@ public class QRGeneration extends JFrame implements Runnable{
 		comboSize.setFont(new Font("Arial", Font.PLAIN, 20));
 		dropdownpanel.add(comboSize, "cell 5 0");
 		
-		JLabel lblError = new JLabel("Error :");
-		lblError.setHorizontalAlignment(SwingConstants.CENTER);
-		lblError.setFont(new Font("Arial", Font.PLAIN, 20));
-		dropdownpanel.add(lblError, "cell 4 1");
-		
-//		String[] errors = {"5%", "10%", "15%", "30%"};
-//		comboError = new JComboBox<String>(errors);
-		comboError = new JComboBox<String>();
-		comboError.addItem("5%");
-		comboError.addItem("10%");
-		comboError.addItem("15%");
-		comboError.addItem("30%");
-		comboError.setFont(new Font("Arial", Font.PLAIN, 20));
-		comboError.setPreferredSize(new Dimension(100, 29));
-		dropdownpanel.add(comboError, "cell 5 1");
-		
-//		JLabel lblEncoding = new JLabel("Encoding :");
-//		lblEncoding.setHorizontalTextPosition(SwingConstants.LEADING);
-//		lblEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
-//		dropdownpanel.add(lblEncoding, "cell 4 2");
-//		
-//		String[] encodings = {"Alphanumeric", "Binary"};
-//		comboEncoding = new JComboBox<String>(encodings);
-//		comboEncoding.setFont(new Font("Arial", Font.PLAIN, 20));
-//		comboEncoding.setPreferredSize(new Dimension(100, 29));
-//		dropdownpanel.add(comboEncoding, "cell 5 2");
 		
 		// Add user area for text to generate as a qr code
 		JLabel lblCode = new JLabel("Text :");
