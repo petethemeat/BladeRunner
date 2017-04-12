@@ -40,6 +40,7 @@ public class QRGeneration extends JFrame implements Runnable{
 	/*
 	 * Variables
 	 */
+	private String home = System.getProperty("C:\\");
 	private Font font = new Font("Arial", Font.PLAIN, 20);
 	private JComboBox<String> comboSize;
 	private JPanel imagepanel;

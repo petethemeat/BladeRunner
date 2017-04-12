@@ -45,7 +45,11 @@ import java.awt.Component;
 
 public class GUI {
 
+	/*
+	 * Variables
+	 */
 	private JFrame frmBit;
+	private Font font = new Font("Arial", Font.PLAIN, 26);
 	private JTextField textField;
 	private JLabel errorMessage;
 	public static double screenWidth;
@@ -99,15 +103,15 @@ public class GUI {
 		frmBit.setJMenuBar(menuBar);
 		
 		JMenu mnFile = new JMenu("File");
-		mnFile.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnFile.setFont(font);
 		menuBar.add(mnFile);
 		
 		JMenu mnNew = new JMenu("New");
-		mnNew.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnNew.setFont(font);
 		mnFile.add(mnNew);
 		
 		JMenuItem mntmBlade = new JMenuItem("Blade");
-		mntmBlade.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmBlade.setFont(font);
 		mntmBlade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Create new window to enter data for submission to database
@@ -119,7 +123,7 @@ public class GUI {
 		mnNew.add(mntmBlade);
 		
 		JMenuItem mntmClose = new JMenuItem("Close");
-		mntmClose.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmClose.setFont(font);
 		mntmClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
@@ -132,11 +136,11 @@ public class GUI {
 		
 		
 		JMenu mnScan = new JMenu("Scan");
-		mnScan.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnScan.setFont(font);
 		menuBar.add(mnScan);
 		
 		JRadioButtonMenuItem rdbtnmntmQr = new JRadioButtonMenuItem("QR");
-		rdbtnmntmQr.setFont(new Font("Arial", Font.PLAIN, 26));
+		rdbtnmntmQr.setFont(font);
 		rdbtnmntmQr.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				textField.setEditable(true);
@@ -145,7 +149,7 @@ public class GUI {
 		mnScan.add(rdbtnmntmQr);
 		
 		JRadioButtonMenuItem rdbtnmntmRfid = new JRadioButtonMenuItem("RFID");
-		rdbtnmntmRfid.setFont(new Font("Arial", Font.PLAIN, 26));
+		rdbtnmntmRfid.setFont(font);
 		rdbtnmntmRfid.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				textField.setEditable(true);
@@ -158,16 +162,16 @@ public class GUI {
 		btngroup.add(rdbtnmntmRfid);
 		
 		JMenu mnSetup = new JMenu("Setup");
-		mnSetup.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnSetup.setFont(font);
 		menuBar.add(mnSetup);
 		
 		JMenu mnPairing = new JMenu("Pairing");
-		mnPairing.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnPairing.setFont(font);
 		mnSetup.add(mnPairing);
 		
 		// Menu item PC to pair QR with PC
 		JMenu mnPc = new JMenu("PC");
-		mnPc.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnPc.setFont(font);
 		mnPairing.add(mnPc);
 		
 		// Barcode image (PC) and instructions for pairing
@@ -179,7 +183,7 @@ public class GUI {
 	
 		// Menu item MAC to pair QR with MAC
 		JMenu mnMac = new JMenu("MAC");
-		mnMac.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnMac.setFont(font);
 		mnPairing.add(mnMac);
 		
 		// Barcode image (MAC) and instructions for pairing
@@ -190,12 +194,12 @@ public class GUI {
 		
 		// Drop menu for selection of different QR scan modes
 		JMenu mnScanMode = new JMenu("Scan Mode");
-		mnScanMode.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnScanMode.setFont(font);
 		mnSetup.add(mnScanMode);
 		
 		// Selection for auto scan mode (scans and displays info)
 		JMenu mnAutomatic = new JMenu("Automatic");
-		mnAutomatic.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnAutomatic.setFont(font);
 		mnScanMode.add(mnAutomatic);
 		
 		// Barcode image and instructions
@@ -207,7 +211,7 @@ public class GUI {
 		
 		// Drop menu for inventory scan settings of QR scanner
 		JMenu mnManual = new JMenu("Inventory");
-		mnManual.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnManual.setFont(font);
 		mnScanMode.add(mnManual);
 		
 		// Instructions and barcode images for inventory mode of QR
@@ -224,17 +228,17 @@ public class GUI {
 				qrcode.setLocationRelativeTo(frmBit);
 			}
 		});
-		mnQRCode.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnQRCode.setFont(font);
 		mnSetup.add(mnQRCode);
 		
 		
 		
 		JMenu mnHelp = new JMenu("Help");
-		mnHelp.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnHelp.setFont(font);
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmQr_1 = new JMenuItem("QR");
-		mntmQr_1.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmQr_1.setFont(font);
 		mntmQr_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Open file for QR instructions
@@ -260,7 +264,7 @@ public class GUI {
 		mnHelp.add(mntmQr_1);
 		
 		JMenu mnRfid = new JMenu("RFID");
-		mnRfid.setFont(new Font("Arial", Font.PLAIN, 26));
+		mnRfid.setFont(font);
 		mnHelp.add(mnRfid);
 		
 		JMenuItem mntmTiMicrocontroller = new JMenuItem("TI MicroController");
@@ -289,7 +293,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmTiMicrocontroller.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmTiMicrocontroller.setFont(font);
 		mnRfid.add(mntmTiMicrocontroller);
 		
 		JMenuItem mntmRfidM = new JMenuItem("RFID Module");
@@ -318,7 +322,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmRfidM.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmRfidM.setFont(font);
 		mnRfid.add(mntmRfidM);
 		
 		JMenuItem mntmWirelessModule = new JMenuItem("Wireless Module");
@@ -347,7 +351,7 @@ public class GUI {
 				}
 			}
 		});
-		mntmWirelessModule.setFont(new Font("Arial", Font.PLAIN, 26));
+		mntmWirelessModule.setFont(font);
 		mnRfid.add(mntmWirelessModule);
 		
 		// Setup logo for top of screen and resize appropriately

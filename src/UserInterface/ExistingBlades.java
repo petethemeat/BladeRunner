@@ -24,6 +24,11 @@ import java.awt.Color;
 
 @SuppressWarnings("serial")
 public class ExistingBlades extends JFrame implements Runnable{
+	
+	/*
+	 * Variables
+	 */
+	private Font font = new Font("Arial", Font.PLAIN, 20);
 	private JPanel infopanel;
 	private JTextField bladeID;
 	private JTextField bladeSize;
@@ -54,7 +59,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		this.setSize((int)width/3, (int)height/4);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
-		// Initialize bladID string to result[0]
+		// Initialize bladeID string to result[0]
 		id = results[0];
 		
 		// Setup of panel to accept and layout buttons in bottom of new window
@@ -82,7 +87,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 			}
 		});
 		btnEdit.setFocusPainted(false);
-		btnEdit.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnEdit.setFont(font);
 		btnEdit.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		buttonpanel.add(btnEdit);
 		
@@ -108,7 +113,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		});
 		btnUpdate.setFocusPainted(false);
 		btnUpdate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnUpdate.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnUpdate.setFont(font);
 		buttonpanel.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("DELETE");
@@ -124,7 +129,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		});
 		btnDelete.setFocusPainted(false);
 		btnDelete.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnDelete.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnDelete.setFont(font);
 		buttonpanel.add(btnDelete);
 		
 		JButton btnClose = new JButton("CLOSE");
@@ -135,7 +140,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		});
 		btnClose.setFocusPainted(false);
 		btnClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnClose.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnClose.setFont(font);
 		buttonpanel.add(btnClose);
 		
 		// Setup of panel to parse and populate window with blade information
@@ -216,7 +221,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lblEdited = new JLabel("Blade ID #" + id + " has been updated");
 		lblEdited.setForeground(Color.RED);
 		lblEdited.setVisible(false);
-		lblEdited.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblEdited.setFont(font);
 		lblEdited.setHorizontalAlignment(SwingConstants.CENTER);
 		infopanel.add(lblEdited, "cell 3 8,growx");
 		

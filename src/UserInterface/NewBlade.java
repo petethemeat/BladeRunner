@@ -22,6 +22,11 @@ import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class NewBlade extends JFrame implements Runnable{
+	
+	/*
+	 * Variables
+	 */
+	private Font font = new Font("Arial", Font.PLAIN, 20);
 	private JTextField bladeID;
 	private JTextField bladeSize;
 	private JTextField startDate;
@@ -79,7 +84,7 @@ public class NewBlade extends JFrame implements Runnable{
 		});
 		btnAdd.setFocusPainted(false);
 		btnAdd.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnAdd.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnAdd.setFont(font);
 		buttonpanel.add(btnAdd);
 		
 		JButton btnDate = new JButton("GET DATE");
@@ -95,7 +100,7 @@ public class NewBlade extends JFrame implements Runnable{
 		});
 		btnDate.setFocusPainted(false);
 		btnDate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnDate.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnDate.setFont(font);
 		buttonpanel.add(btnDate);
 		
 		JButton btnClose = new JButton("CLOSE");
@@ -106,7 +111,7 @@ public class NewBlade extends JFrame implements Runnable{
 		});
 		btnClose.setFocusPainted(false);
 		btnClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnClose.setFont(new Font("Arial", Font.PLAIN, 19));
+		btnClose.setFont(font);
 		buttonpanel.add(btnClose);
 		
 		// Setup of panel to parse and populate window with blade information
@@ -182,7 +187,7 @@ public class NewBlade extends JFrame implements Runnable{
 		lblNewBladeAdded = new JLabel("New Blade Added to Database");
 		lblNewBladeAdded.setForeground(Color.RED);
 		lblNewBladeAdded.setVisible(false);
-		lblNewBladeAdded.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblNewBladeAdded.setFont(font);
 		lblNewBladeAdded.setHorizontalAlignment(SwingConstants.CENTER);
 		infopanel.add(lblNewBladeAdded, "cell 3 8, growx");
 		
