@@ -1,6 +1,7 @@
 package UserInterface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,8 +42,13 @@ public class QRGeneration extends JFrame implements Runnable{
 	private InputStream qrpath;
 	private String qrname;
 	private byte[] buffer;
-	private OutputStream outStream;
+	private OutputStream outStreamTemp;
+	private OutputStream outStreamTarget;
 	private Image img;
+	private JLabel qrimage;
+	private File temp;
+	private JLabel qrCreated;
+	private File targetFile;
 
 	/**
 	 * Create the application.
@@ -97,23 +103,38 @@ public class QRGeneration extends JFrame implements Runnable{
 					buffer = new byte[qrpath.available()];
 					qrpath.read(buffer);
 					// Write image buffer to temporary file to add to preview pane
-					outStream = new FileOutputStream(new File("C:/Windows/Temp/tmp.png"));
-					outStream.write(buffer);
+					temp = File.createTempFile("temp", ".png");
+					System.out.println(temp.getAbsolutePath());
+					outStreamTemp = new FileOutputStream(temp);
+					outStreamTemp.write(buffer);
+		
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+				try {
+					img = ImageIO.read(temp);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 				// Add image to imagepanel
-				JLabel qrimage = new JLabel("");
-				qrimage.setHorizontalAlignment(SwingConstants.CENTER);
+				
+				//Image img = new ImageIcon(this.getClass().getResource("C:/Windows/Temp/tmp.png")).getImage();
+				Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/6, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
+				qrimage.setIcon(new ImageIcon(scaledimg));
+				qrCreated.setVisible(true);
+			
+				// Delete temp file
+				temp.delete();
+				
+				// Close streams to release resources 
 				try {
-					img = ImageIO.read(new File("C:/Windows/Temp/tmp.png"));
+					qrpath.close();
+					outStreamTemp.close();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				//Image img = new ImageIcon(this.getClass().getResource("C:/Windows/Temp/tmp.png")).getImage();
-				Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/4, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
-				qrimage.setIcon(new ImageIcon(scaledimg));
-				imagepanel.add(qrimage, BorderLayout.CENTER);
+				
 			}
 			
 		});
@@ -148,10 +169,10 @@ public class QRGeneration extends JFrame implements Runnable{
 			      if (rVal == JFileChooser.APPROVE_OPTION) {
 			    	  qrname = c.getSelectedFile().getName();
 			    	  
-					  File targetFile = new File(c.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+					  targetFile = new File(c.getCurrentDirectory().toString() + "\\" + qrname + ".png");
 					try {
-						outStream = new FileOutputStream(targetFile);
-						outStream.write(buffer);
+						outStreamTarget = new FileOutputStream(targetFile);
+						outStreamTarget.write(buffer);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
@@ -159,6 +180,14 @@ public class QRGeneration extends JFrame implements Runnable{
 					}
 				      
 			      }
+			      // Close output stream after completion
+			      try {
+					outStreamTarget.close();
+			      } catch (IOException e) {
+						e.printStackTrace();
+			      }
+			      
+			      
 			      if (rVal == JFileChooser.CANCEL_OPTION) {
 			    	c.setVisible(false);
 			      }
@@ -223,6 +252,19 @@ public class QRGeneration extends JFrame implements Runnable{
 		//imagepanel.setBackground(Color.WHITE);
 		getContentPane().add(imagepanel, BorderLayout.CENTER);
 		imagepanel.setLayout(new BorderLayout(0, 0));
+		
+		qrimage = new JLabel("");
+		qrimage.setHorizontalTextPosition(SwingConstants.CENTER);
+		qrimage.setHorizontalAlignment(SwingConstants.CENTER);
+		imagepanel.add(qrimage, BorderLayout.CENTER);
+		
+		qrCreated = new JLabel("<html>QR Image Generated<br><&nbsp Please Save to File</html>");
+		qrCreated.setHorizontalTextPosition(SwingConstants.CENTER);
+		qrCreated.setHorizontalAlignment(SwingConstants.CENTER);
+		qrCreated.setFont(new Font("Arial", Font.PLAIN, 30));
+		qrCreated.setForeground(Color.RED);
+		qrCreated.setVisible(false);
+		imagepanel.add(qrCreated, BorderLayout.SOUTH);
 		
 	}
 
