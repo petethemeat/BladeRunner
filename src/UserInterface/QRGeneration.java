@@ -40,9 +40,9 @@ public class QRGeneration extends JFrame implements Runnable{
 	/*
 	 * Variables
 	 */
-	private String home = System.getProperty("C:\\");
+	private String home = System.getProperty("user.home");
 	private Font font = new Font("Arial", Font.PLAIN, 20);
-	private JComboBox<String> comboSize;
+	private JComboBox<String> comboResolution;
 	private JPanel imagepanel;
 	private JTextField id;
 	private InputStream qrpath;
@@ -94,8 +94,11 @@ public class QRGeneration extends JFrame implements Runnable{
 			// Pull info from menus and run generation code to populate image panel with QR
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String size = (String) comboSize.getSelectedItem();
-				size = size.replace("\"", "");
+				String size = (String) comboResolution.getSelectedItem();
+				// Eliminate end of string to pass to controller
+				Integer endindex = size.indexOf(" ");
+				size = size.substring(0, endindex);
+				System.out.println(size);
 				Integer qrsize = Integer.parseInt(size);
 				String encoding = id.getText();
 				try {
@@ -168,7 +171,7 @@ public class QRGeneration extends JFrame implements Runnable{
 			// Close window upon selection of close button
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser saveBrowser = new JFileChooser();
+				JFileChooser saveBrowser = new JFileChooser(home + "/Desktop");
 				// Set Chooser size in relation to computer screen
 				saveBrowser.setPreferredSize(new Dimension((int)GUI.screenWidth/2, (int)GUI.screenHeight/2));
 				// Set font for jfilechooser so user can see it
@@ -178,8 +181,12 @@ public class QRGeneration extends JFrame implements Runnable{
 			    int rVal = saveBrowser.showSaveDialog(QRGeneration.this);
 			    if (rVal == JFileChooser.APPROVE_OPTION) {
 			    	qrname = saveBrowser.getSelectedFile().getName();
-			    	  
-					targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+			    	if(qrname.endsWith(".png")){
+			    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname);
+			    	}
+			    	else { 
+			    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+			    	}
 					try {
 						outStreamTarget = new FileOutputStream(targetFile);
 						outStreamTarget.write(buffer);
@@ -237,14 +244,15 @@ public class QRGeneration extends JFrame implements Runnable{
 		
 		
 		// Add items to combobox
-		comboSize = new JComboBox<String>();
-		comboSize.addItem("1\"");
-		comboSize.addItem("2\"");
-		comboSize.addItem("3\"");
-		comboSize.addItem("4\"");
-		comboSize.setPreferredSize(new Dimension(100, 29));
-		comboSize.setFont(font);
-		dropdownpanel.add(comboSize, "cell 5 0");
+		comboResolution = new JComboBox<String>();
+		comboResolution.addItem("100 x 100");
+		comboResolution.addItem("200 x 200");
+		comboResolution.addItem("300 x 300");
+		comboResolution.addItem("400 x 400");
+		comboResolution.addItem("500 x 500");
+		comboResolution.setPreferredSize(new Dimension(150, 30));
+		comboResolution.setFont(font);
+		dropdownpanel.add(comboResolution, "cell 5 0");
 		
 		
 		// Add user area for text to generate as a qr code
@@ -256,7 +264,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		id = new JTextField(null);
 		id.setFont(font);
 		dropdownpanel.add(id, "cell 5 2");
-		id.setColumns(10);
+		id.setPreferredSize(new Dimension(150,30));
 		id.setEditable(true);
 		
 		
