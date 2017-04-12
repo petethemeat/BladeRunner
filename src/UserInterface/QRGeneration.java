@@ -2,6 +2,8 @@ package UserInterface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -34,9 +36,12 @@ import net.miginfocom.swing.MigLayout;
 
 @SuppressWarnings("serial")
 public class QRGeneration extends JFrame implements Runnable{
-	JComboBox<String> comboSize;
-	JComboBox<String> comboError;
-	JComboBox<String> comboEncoding;
+	
+	/*
+	 * Variables
+	 */
+	private Font font = new Font("Arial", Font.PLAIN, 20);
+	private JComboBox<String> comboSize;
 	private JPanel imagepanel;
 	private JTextField id;
 	private InputStream qrpath;
@@ -104,7 +109,6 @@ public class QRGeneration extends JFrame implements Runnable{
 					qrpath.read(buffer);
 					// Write image buffer to temporary file to add to preview pane
 					temp = File.createTempFile("temp", ".png");
-					System.out.println(temp.getAbsolutePath());
 					outStreamTemp = new FileOutputStream(temp);
 					outStreamTemp.write(buffer);
 		
@@ -117,11 +121,11 @@ public class QRGeneration extends JFrame implements Runnable{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				// Add image to imagepanel
-				
-				//Image img = new ImageIcon(this.getClass().getResource("C:/Windows/Temp/tmp.png")).getImage();
+				// Add image to imagepanel preview label
 				Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/6, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
 				qrimage.setIcon(new ImageIcon(scaledimg));
+				// Acknowledge file created for user
+				qrCreated.setText("<html>QR Image Generated<br><&nbsp Please Save to File</html>");
 				qrCreated.setVisible(true);
 			
 				// Delete temp file
@@ -138,7 +142,7 @@ public class QRGeneration extends JFrame implements Runnable{
 			}
 			
 		});
-		generate.setFont(new Font("Arial", Font.PLAIN, 20));
+		generate.setFont(font);
 		generate.setFocusPainted(false);
 		generate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_generate = new GridBagConstraints();
@@ -148,7 +152,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		buttonpanel.add(generate, gbc_generate);
 		
 		
-		JButton cancel = new JButton("CANCEL");
+		JButton cancel = new JButton("EXIT");
 		cancel.addActionListener(new ActionListener() {
 			// Close window upon selection of close button
 			@Override
@@ -163,13 +167,18 @@ public class QRGeneration extends JFrame implements Runnable{
 			// Close window upon selection of close button
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				 JFileChooser c = new JFileChooser();
-			      // Demonstrate "Save" dialog:
-			      int rVal = c.showSaveDialog(QRGeneration.this);
-			      if (rVal == JFileChooser.APPROVE_OPTION) {
-			    	  qrname = c.getSelectedFile().getName();
+				JFileChooser saveBrowser = new JFileChooser();
+				// Set Chooser size in relation to computer screen
+				saveBrowser.setPreferredSize(new Dimension((int)GUI.screenWidth/2, (int)GUI.screenHeight/2));
+				// Set font for jfilechooser so user can see it
+				setFileChooserFont(saveBrowser.getComponents());
+				
+			    // Demonstrate "Save" dialog:
+			    int rVal = saveBrowser.showSaveDialog(QRGeneration.this);
+			    if (rVal == JFileChooser.APPROVE_OPTION) {
+			    	qrname = saveBrowser.getSelectedFile().getName();
 			    	  
-					  targetFile = new File(c.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+					targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname + ".png");
 					try {
 						outStreamTarget = new FileOutputStream(targetFile);
 						outStreamTarget.write(buffer);
@@ -178,31 +187,33 @@ public class QRGeneration extends JFrame implements Runnable{
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				      
-			      }
-			      // Close output stream after completion
-			      try {
-					outStreamTarget.close();
-			      } catch (IOException e) {
+					// Display message to user acknowledging the save
+					qrCreated.setText("<html><br>File Saved</html>");
+					
+					// Close output stream after completion
+				    try {
+				    	outStreamTarget.close();
+				    } catch (IOException e) {
 						e.printStackTrace();
-			      }
-			      
-			      
-			      if (rVal == JFileChooser.CANCEL_OPTION) {
-			    	c.setVisible(false);
-			      }
+				    }
+				      
+			     }
+			     // If cancel is chosen hide the filechooser window
+			     if (rVal == JFileChooser.CANCEL_OPTION) {
+			    	 saveBrowser.setVisible(false);
+			     }
 			}
 			
 		});
 		save.setFocusPainted(false);
 		save.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		save.setFont(new Font("Arial", Font.PLAIN, 20));
+		save.setFont(font);
 		GridBagConstraints gbc_save = new GridBagConstraints();
 		gbc_save.insets = new Insets(0, 0, 10, 0);
 		gbc_save.gridx = 0;
 		gbc_save.gridy = 1;
 		buttonpanel.add(save, gbc_save);
-		cancel.setFont(new Font("Arial", Font.PLAIN, 20));
+		cancel.setFont(font);
 		cancel.setFocusPainted(false);
 		cancel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		GridBagConstraints gbc_cancel = new GridBagConstraints();
@@ -220,7 +231,7 @@ public class QRGeneration extends JFrame implements Runnable{
 		JLabel lblSize = new JLabel("Size :");
 		lblSize.setHorizontalTextPosition(SwingConstants.CENTER);
 		lblSize.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSize.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblSize.setFont(font);
 		dropdownpanel.add(lblSize, "cell 4 0");
 		
 		
@@ -231,18 +242,18 @@ public class QRGeneration extends JFrame implements Runnable{
 		comboSize.addItem("3\"");
 		comboSize.addItem("4\"");
 		comboSize.setPreferredSize(new Dimension(100, 29));
-		comboSize.setFont(new Font("Arial", Font.PLAIN, 20));
+		comboSize.setFont(font);
 		dropdownpanel.add(comboSize, "cell 5 0");
 		
 		
 		// Add user area for text to generate as a qr code
 		JLabel lblCode = new JLabel("Text :");
 		lblCode.setHorizontalTextPosition(SwingConstants.LEADING);
-		lblCode.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblCode.setFont(font);
 		dropdownpanel.add(lblCode, "cell 4 2");
 		
 		id = new JTextField(null);
-		id.setFont(new Font("Arial", Font.PLAIN, 20));
+		id.setFont(font);
 		dropdownpanel.add(id, "cell 5 2");
 		id.setColumns(10);
 		id.setEditable(true);
@@ -253,12 +264,14 @@ public class QRGeneration extends JFrame implements Runnable{
 		getContentPane().add(imagepanel, BorderLayout.CENTER);
 		imagepanel.setLayout(new BorderLayout(0, 0));
 		
+		// Create label for image display later
 		qrimage = new JLabel("");
 		qrimage.setHorizontalTextPosition(SwingConstants.CENTER);
 		qrimage.setHorizontalAlignment(SwingConstants.CENTER);
 		imagepanel.add(qrimage, BorderLayout.CENTER);
 		
-		qrCreated = new JLabel("<html>QR Image Generated<br><&nbsp Please Save to File</html>");
+		// Create label for user messages later
+		qrCreated = new JLabel();
 		qrCreated.setHorizontalTextPosition(SwingConstants.CENTER);
 		qrCreated.setHorizontalAlignment(SwingConstants.CENTER);
 		qrCreated.setFont(new Font("Arial", Font.PLAIN, 30));
@@ -267,6 +280,24 @@ public class QRGeneration extends JFrame implements Runnable{
 		imagepanel.add(qrCreated, BorderLayout.SOUTH);
 		
 	}
+	
+	/**
+	 * Method will iterate through all components of jfilechooser to set proper font
+	 * @param comp
+	 */
+	private void setFileChooserFont(Component[] comp)
+	{  
+	  for(int x = 0; x < comp.length; x++)  
+	  {  
+	    if(comp[x] instanceof Container) {
+	    	setFileChooserFont(((Container)comp[x]).getComponents());  
+	    }
+	    try{
+	    	comp[x].setFont(font);
+	    }  
+	    catch(Exception e){}//do nothing  
+	  }  
+	}  
 
 
 	@Override
