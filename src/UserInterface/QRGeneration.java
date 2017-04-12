@@ -1,22 +1,23 @@
 package UserInterface;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -35,10 +36,13 @@ public class QRGeneration extends JFrame implements Runnable{
 	JComboBox<String> comboSize;
 	JComboBox<String> comboError;
 	JComboBox<String> comboEncoding;
+	private JPanel imagepanel;
 	private JTextField id;
 	private InputStream qrpath;
 	private String qrname;
 	private byte[] buffer;
+	private OutputStream outStream;
+	private Image img;
 
 	/**
 	 * Create the application.
@@ -76,15 +80,11 @@ public class QRGeneration extends JFrame implements Runnable{
 		JButton generate = new JButton("GENERATE");
 		generate.addActionListener(new ActionListener() {
 			// Pull info from menus and run generation code to populate image panel with QR
-			@SuppressWarnings("unused")
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String size = (String) comboSize.getSelectedItem();
 				size = size.replace("\"", "");
 				Integer qrsize = Integer.parseInt(size);
-				String error = (String) comboError.getSelectedItem();
-				error = error.replace("%", "");
-				Integer qrerror = Integer.parseInt(error);
 				String encoding = id.getText();
 				try {
 					qrpath = QRGeneratorController.run(qrsize, encoding);
@@ -96,10 +96,24 @@ public class QRGeneration extends JFrame implements Runnable{
 				try {
 					buffer = new byte[qrpath.available()];
 					qrpath.read(buffer);
+					// Write image buffer to temporary file to add to preview pane
+					outStream = new FileOutputStream(new File("C:/Windows/Temp/tmp.png"));
+					outStream.write(buffer);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-			   
+				// Add image to imagepanel
+				JLabel qrimage = new JLabel("");
+				qrimage.setHorizontalAlignment(SwingConstants.CENTER);
+				try {
+					img = ImageIO.read(new File("C:/Windows/Temp/tmp.png"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				//Image img = new ImageIcon(this.getClass().getResource("C:/Windows/Temp/tmp.png")).getImage();
+				Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/4, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
+				qrimage.setIcon(new ImageIcon(scaledimg));
+				imagepanel.add(qrimage, BorderLayout.CENTER);
 			}
 			
 		});
@@ -135,7 +149,6 @@ public class QRGeneration extends JFrame implements Runnable{
 			    	  qrname = c.getSelectedFile().getName();
 			    	  
 					  File targetFile = new File(c.getCurrentDirectory().toString() + "\\" + qrname + ".png");
-				      OutputStream outStream;
 					try {
 						outStream = new FileOutputStream(targetFile);
 						outStream.write(buffer);
@@ -183,8 +196,6 @@ public class QRGeneration extends JFrame implements Runnable{
 		
 		
 		// Add items to combobox
-//		String[] sizes = {"1\"", "2\"", "3\"", "4\""};
-//		comboSize = new JComboBox<String>(sizes);
 		comboSize = new JComboBox<String>();
 		comboSize.addItem("1\"");
 		comboSize.addItem("2\"");
@@ -208,9 +219,10 @@ public class QRGeneration extends JFrame implements Runnable{
 		id.setEditable(true);
 		
 		
-		JPanel imagepanel = new JPanel();
-		imagepanel.setBackground(Color.WHITE);
+		imagepanel = new JPanel();
+		//imagepanel.setBackground(Color.WHITE);
 		getContentPane().add(imagepanel, BorderLayout.CENTER);
+		imagepanel.setLayout(new BorderLayout(0, 0));
 		
 	}
 

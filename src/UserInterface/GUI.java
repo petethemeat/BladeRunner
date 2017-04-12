@@ -48,8 +48,8 @@ public class GUI {
 	private JFrame frmBit;
 	private JTextField textField;
 	private JLabel errorMessage;
-	private double screenWidth;
-	private double screenHeight;
+	public static double screenWidth;
+	public static double screenHeight;
 	private String[] results;
 	private String id;
 
