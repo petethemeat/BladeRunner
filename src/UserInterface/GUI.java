@@ -450,7 +450,8 @@ public class GUI {
 		pnlButton.add(btnQuery);
 		pnlButton.add(Box.createVerticalStrut(10));
 		
-		// Throw a visual error to scan for an id
+		// Throw a visual error to scan for an id , 
+		// Will also be used to acknowledge no blade exits if querying bad id
 		errorMessage = new JLabel("Enter ID");
 		errorMessage.setVisible(false);
 		errorMessage.setForeground(Color.RED);
