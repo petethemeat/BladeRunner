@@ -161,10 +161,23 @@ public class GUI {
 		btngroup.add(rdbtnmntmQr);
 		btngroup.add(rdbtnmntmRfid);
 		
+		// Add menu for Setup of qr and qr code generation
 		JMenu mnSetup = new JMenu("Setup");
 		mnSetup.setFont(font);
 		menuBar.add(mnSetup);
 		
+		// Add menu for qr power off 
+		JMenu mnqrpower = new JMenu("QR Power Off");
+		mnqrpower.setFont(font);
+		mnSetup.add(mnqrpower);
+		
+		// Add barcode image to allow for user to power off QR
+		JLabel qr_off = new JLabel("");
+		mnqrpower.add(qr_off);
+		Image off_img = new ImageIcon(this.getClass().getResource("/res/QRPowerOff.png")).getImage();
+		qr_off.setIcon(new ImageIcon(off_img));
+		
+		// Add menu for pairing of qr with PC or MAC (MAC unused in this prototype)
 		JMenu mnPairing = new JMenu("Pairing");
 		mnPairing.setFont(font);
 		mnSetup.add(mnPairing);
