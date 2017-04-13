@@ -125,6 +125,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				lblEdited.setText("Blade ID #" + id + " has been deleted");
 			}
 		});
 		btnDelete.setFocusPainted(false);
