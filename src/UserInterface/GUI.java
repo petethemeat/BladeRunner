@@ -370,7 +370,7 @@ public class GUI {
 		// Setup logo for top of screen and resize appropriately
 		JLabel logo = new JLabel("");
 		logo.setHorizontalAlignment(SwingConstants.CENTER);
-		Image img = new ImageIcon(this.getClass().getResource("/res/logo.png")).getImage();
+		Image img = new ImageIcon(this.getClass().getResource("/res/TenarisLogo.png")).getImage();
 		Image scaledimg = img.getScaledInstance((int)screenWidth/2, (int)screenHeight/5,  java.awt.Image.SCALE_SMOOTH);
 		logo.setIcon(new ImageIcon(scaledimg));
 		frmBit.getContentPane().add(logo, BorderLayout.NORTH);
@@ -402,6 +402,7 @@ public class GUI {
 		panel.add(pnlButton, BorderLayout.CENTER);
 		
 		JButton btnQuery = new JButton("QUERY DATABASE");
+		btnQuery.setForeground(Color.BLACK);
 		btnQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get blade id from textfield and query the database for blade info
@@ -443,7 +444,7 @@ public class GUI {
 		btnQuery.setMaximumSize(new Dimension(400, 80));
 		btnQuery.setFocusPainted(false);
 		btnQuery.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnQuery.setFont(new Font("Arial", Font.PLAIN, 30));
+		btnQuery.setFont(new Font("Arial", Font.PLAIN, 36));
 		pnlButton.add(btnQuery);
 		pnlButton.add(Box.createVerticalStrut(10));
 		
