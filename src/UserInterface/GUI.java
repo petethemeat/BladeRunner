@@ -420,12 +420,14 @@ public class GUI {
 							querydb.setLocationRelativeTo(frmBit);	
 						
 						} catch (SQLException e) {
-							// Pop-up window for error, no such blade exists
-							
+							// Pop-up message for error, no such blade exists
+							errorMessage.setText("Blade ID #" + id + " does not exist");
+							errorMessage.setVisible(true);
 							e.printStackTrace();
 						}
 					}
 					else{
+						errorMessage.setText("Enter ID");
 						errorMessage.setVisible(true);
 					}
 				}
