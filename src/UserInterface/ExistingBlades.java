@@ -13,6 +13,7 @@ import Controllers.UpdateController;
 
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -119,15 +120,21 @@ public class ExistingBlades extends JFrame implements Runnable{
 		JButton btnDelete = new JButton("DELETE");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Call on delete controller to delete id from database
-				try {
-					DeleteController.run(bladeID.getText());
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-					lblEdited.setText("Blade ID #" + id + " has already been deleted");
+				// Make a popup window to ask user for reassurance in deleting the blade
+				// 0 = Yes, 1 = No
+				int answer = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation", JOptionPane.YES_NO_OPTION);
+				if(answer == 0){
+					// Call on delete controller to delete id from database
+					try {
+						DeleteController.run(bladeID.getText());
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+						lblEdited.setText("Blade ID #" + id + " has already been deleted");
+					}
+					lblEdited.setText("Blade ID #" + id + " has been deleted");
+					lblEdited.setVisible(true);
 				}
-				lblEdited.setText("Blade ID #" + id + " has been deleted");
-				lblEdited.setVisible(true);
+				else{} // Do nothing		
 			}
 		});
 		btnDelete.setFocusPainted(false);
