@@ -56,7 +56,6 @@ public class GUI {
 	private JFrame frmBit;
 	private Font font = new Font("Arial", Font.PLAIN, 26);
 	private JTextField textField;
-	private JLabel errorMessage;
 	public static double screenWidth;
 	public static double screenHeight;
 	private String[] results;
