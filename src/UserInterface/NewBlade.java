@@ -51,7 +51,7 @@ public class NewBlade extends JFrame implements Runnable{
 	 */
 	public NewBlade(double width, double height) {
 		this.setTitle("New Blade");
-		this.setSize((int)width/3, (int)height/4);
+		this.setSize((int)width/3, (int)height/3);
 		this.setResizable(false);
 		this.setTitle("New Blade");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -71,6 +71,9 @@ public class NewBlade extends JFrame implements Runnable{
 				values[0] = bladeID.getText();
 				values[1] = bladeSize.getText();
 				values[2] = startDate.getText();
+				// Add error message if wrong format or nothing entered
+				
+				
 				values[3] = hoursUsed.getText();
 				try {
 					AddController.run(fields, values);
@@ -82,10 +85,6 @@ public class NewBlade extends JFrame implements Runnable{
 			}
 			
 		});
-		btnAdd.setFocusPainted(false);
-		btnAdd.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnAdd.setFont(font);
-		buttonpanel.add(btnAdd);
 		
 		JButton btnDate = new JButton("GET DATE");
 		btnDate.addActionListener(new ActionListener() {
@@ -102,6 +101,10 @@ public class NewBlade extends JFrame implements Runnable{
 		btnDate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDate.setFont(font);
 		buttonpanel.add(btnDate);
+		btnAdd.setFocusPainted(false);
+		btnAdd.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnAdd.setFont(font);
+		buttonpanel.add(btnAdd);
 		
 		JButton btnClose = new JButton("CLOSE");
 		btnClose.addActionListener(new ActionListener() {
@@ -109,6 +112,25 @@ public class NewBlade extends JFrame implements Runnable{
 				dispose();
 			}
 		});
+		
+		// Added button for clearing text fields
+		JButton btnClear = new JButton("CLEAR");
+		btnClear.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// Clear all fields for new info to be added
+				bladeID.setText("");
+				bladeSize.setText("");
+				startDate.setText("");
+				hoursUsed.setText("");
+				// Clear user message
+				lblNewBladeAdded.setVisible(false);
+			}
+		});
+		btnClear.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnClear.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnClear.setFocusPainted(false);
+		buttonpanel.add(btnClear);
 		btnClose.setFocusPainted(false);
 		btnClose.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnClose.setFont(font);

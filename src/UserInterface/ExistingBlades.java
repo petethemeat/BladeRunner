@@ -1,12 +1,14 @@
 package UserInterface;
 
 import javax.swing.JFrame;
+
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import java.awt.Dimension;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.FontUIResource;
 
 import Controllers.DeleteController;
 import Controllers.UpdateController;
@@ -16,12 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import net.miginfocom.swing.MigLayout;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+
 
 @SuppressWarnings("serial")
 public class ExistingBlades extends JFrame implements Runnable{
@@ -57,7 +61,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		this.setTitle("Blade Info");
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		this.setSize((int)width/3, (int)height/4);
+		this.setSize((int)width/3, (int)height/3);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		// Initialize bladeID string to result[0]
@@ -122,14 +126,24 @@ public class ExistingBlades extends JFrame implements Runnable{
 			public void actionPerformed(ActionEvent e) {
 				// Make a popup window to ask user for reassurance in deleting the blade
 				// 0 = Yes, 1 = No
-				int answer = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirmation", JOptionPane.YES_NO_OPTION);
+				String question = new String("<html><font size='5';font face='arial'>Are you sure?");
+				UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+				int answer = JOptionPane.showConfirmDialog(null, question, "Confirmation", JOptionPane.YES_NO_OPTION);
+				
+				
 				if(answer == 0){
 					// Call on delete controller to delete id from database
 					try {
 						DeleteController.run(bladeID.getText());
 					} catch (SQLException e1) {
 						e1.printStackTrace();
+						
+						/*
+						 * This is not working for unknown reason at this time
+						 */
 						lblEdited.setText("Blade ID #" + id + " has already been deleted");
+						lblEdited.setVisible(true);
+						
 					}
 					lblEdited.setText("Blade ID #" + id + " has been deleted");
 					lblEdited.setVisible(true);
@@ -157,7 +171,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		// Need to setup a loop to take care of this in case they add to config file
 		infopanel = new JPanel();
 		getContentPane().add(infopanel, BorderLayout.CENTER);
-		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][grow][][grow][][grow][grow][grow]"));
+		infopanel.setLayout(new MigLayout("", "[][][][grow][]", "[][grow][][grow][][grow][][grow]"));
 		
 		// Create label, textfield, and format message for blade id
 		JLabel lblBladeId = new JLabel("Blade ID :");
@@ -237,6 +251,5 @@ public class ExistingBlades extends JFrame implements Runnable{
 		
 		
 	}
-
-
+	
 }
