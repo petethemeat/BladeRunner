@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import java.awt.event.ActionListener;
@@ -19,6 +20,8 @@ import java.awt.Color;
 import java.awt.Desktop;
 
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,15 +36,17 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.FontUIResource;
 
 import Controllers.Hub;
 import Controllers.QueryController;
 
 import java.awt.Dimension;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import java.awt.Component;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class GUI {
 
@@ -99,9 +104,11 @@ public class GUI {
 		frmBit.setLocationRelativeTo(null);
 		frmBit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// Add a bar at top of frame for menus
 		JMenuBar menuBar = new JMenuBar();
 		frmBit.setJMenuBar(menuBar);
 		
+		// Start adding menu items in menu bar
 		JMenu mnFile = new JMenu("File");
 		mnFile.setFont(font);
 		menuBar.add(mnFile);
@@ -400,17 +407,21 @@ public class GUI {
 		JPanel pnlButton = new JPanel();
 		pnlButton.setFont(new Font("Arial", Font.PLAIN, 21));
 		panel.add(pnlButton, BorderLayout.CENTER);
+		GridBagLayout gbl_pnlButton = new GridBagLayout();
+		gbl_pnlButton.columnWidths = new int[]{400, 400, 0};
+		gbl_pnlButton.rowHeights = new int[]{60, 0};
+		gbl_pnlButton.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_pnlButton.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		pnlButton.setLayout(gbl_pnlButton);
 		
-		JButton btnQuery = new JButton("QUERY DATABASE");
-		btnQuery.setForeground(Color.BLACK);
-		btnQuery.addActionListener(new ActionListener() {
+		// Add button to retrieve entered blade id info from database
+		JButton btnQueryID = new JButton("QUERY ID");
+		btnQueryID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get blade id from textfield and query the database for blade info
 				if(textField.isEditable()){
 					id = textField.getText();
 					if(!id.equals("")){
-						// Hide error message if they put a value in the textfield
-						errorMessage.setVisible(false);
 						try {
 							results = QueryController.run(id);
 							// Create new window to enter data for submission to database
@@ -420,46 +431,65 @@ public class GUI {
 							querydb.setLocationRelativeTo(frmBit);	
 						
 						} catch (SQLException e) {
-							// Pop-up message for error, no such blade exists
-							errorMessage.setText("Blade ID #" + id + " does not exist");
-							errorMessage.setVisible(true);
-							e.printStackTrace();
+							// Pop up error window
+							String errormessage = new String("<html><font size='5';font face='arial'>Blade Does Not Exist in Database");
+							UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+							JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 					else{
-						errorMessage.setText("Enter ID");
-						errorMessage.setVisible(true);
+						// Pop up error window
+						String errormessage = new String("<html><font size='5';font face='arial'>Please Enter Blade ID");
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else{
-					errorMessage.setVisible(true);
-				}
-				
+					// Pop up error window
+					String errormessage = new String("<html><font size='5';font face='arial'>Please Enter Blade ID");
+					UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+					JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);				}
 			}
 		});
-		pnlButton.setLayout(new BoxLayout(pnlButton, BoxLayout.Y_AXIS));
-		btnQuery.setBackground(Color.LIGHT_GRAY);
-		btnQuery.setIcon(null);
-		btnQuery.setHorizontalTextPosition(SwingConstants.CENTER);
-		btnQuery.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnQuery.setPreferredSize(new Dimension(300, 60));
-		btnQuery.setMaximumSize(new Dimension(400, 80));
-		btnQuery.setFocusPainted(false);
-		btnQuery.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnQuery.setFont(new Font("Arial", Font.PLAIN, 36));
-		pnlButton.add(btnQuery);
-		pnlButton.add(Box.createVerticalStrut(10));
+		btnQueryID.setForeground(Color.BLACK);
+		btnQueryID.setBackground(Color.LIGHT_GRAY);
+		btnQueryID.setIcon(null);
+		btnQueryID.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnQueryID.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnQueryID.setPreferredSize(new Dimension(360, 60));
+		btnQueryID.setMaximumSize(new Dimension(460, 80));
+		btnQueryID.setFocusPainted(false);
+		btnQueryID.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnQueryID.setFont(new Font("Arial", Font.PLAIN, 36));
+		GridBagConstraints gbc_btnQueryID = new GridBagConstraints();
+		gbc_btnQueryID.insets = new Insets(0, 0, 0, 5);
+		gbc_btnQueryID.gridx = 0;
+		gbc_btnQueryID.gridy = 0;
+		pnlButton.add(btnQueryID, gbc_btnQueryID);
 		
-		// Throw a visual error to scan for an id , 
-		// Will also be used to acknowledge no blade exits if querying bad id
-		errorMessage = new JLabel("Enter ID");
-		errorMessage.setVisible(false);
-		errorMessage.setForeground(Color.RED);
-		errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-		errorMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
-		errorMessage.setHorizontalTextPosition(SwingConstants.CENTER);
-		errorMessage.setFont(new Font("Arial", Font.PLAIN, 30));
-		pnlButton.add(errorMessage);
+		// Add a button to retrieve whole database
+		JButton btnDatabaseRetrieval = new JButton("QUERY DATABASE");
+		btnDatabaseRetrieval.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// Retrieve and show the user the whole database of blades
+			}
+			
+		});
+		btnDatabaseRetrieval.setForeground(Color.BLACK);
+		btnDatabaseRetrieval.setBackground(Color.LIGHT_GRAY);
+		btnDatabaseRetrieval.setIcon(null);
+		btnDatabaseRetrieval.setHorizontalTextPosition(SwingConstants.CENTER);
+		btnDatabaseRetrieval.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnDatabaseRetrieval.setPreferredSize(new Dimension(360, 60));
+		btnDatabaseRetrieval.setMaximumSize(new Dimension(460, 80));
+		btnDatabaseRetrieval.setFocusPainted(false);
+		btnDatabaseRetrieval.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnDatabaseRetrieval.setFont(new Font("Arial", Font.PLAIN, 36));
+		GridBagConstraints gbc_btnDatabaseRetrieval = new GridBagConstraints();
+		gbc_btnDatabaseRetrieval.gridx = 1;
+		gbc_btnDatabaseRetrieval.gridy = 0;
+		pnlButton.add(btnDatabaseRetrieval, gbc_btnDatabaseRetrieval);
 		
 	}
 }

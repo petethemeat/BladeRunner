@@ -60,17 +60,20 @@ public class QRGeneration extends JFrame implements Runnable{
 	 * Create the application.
 	 */
 	public QRGeneration(double width, double height) {
+		// Setup of frame and main panel
 		this.setTitle("QR Code Generation");
 		this.setSize((int)width/3, (int)height/2);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		
+		// Add title for preview pane where image will appear below
 		JLabel lblPreview = new JLabel("PREVIEW");
 		lblPreview.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPreview.setFont(new Font("Arial", Font.PLAIN, 24));
 		getContentPane().add(lblPreview, BorderLayout.NORTH);
 		
+		// Setup a panel for size and id info text field and combobox
 		JPanel infopanel = new JPanel();
 		infopanel.setPreferredSize(new Dimension(10, 200));
 		getContentPane().add(infopanel, BorderLayout.SOUTH);
