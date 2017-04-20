@@ -41,8 +41,8 @@ public class ExistingBlades extends JFrame implements Runnable{
 	private JTextField hoursUsed;
 	private JLabel lblEdited;
 	private String id;
-	private String[] fields = {"blade_size", "start_date", "hours_used"}; 
-	private String[] values = new String[3];
+	private String[] fields = {"saw_id", "blade_size", "start_date", "hours_used", "end_of_use"}; 
+	private String[] values = new String[5];
 	private JTextField endofUse;
 	private JTextField machineID;
 
