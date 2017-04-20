@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
@@ -35,7 +37,6 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.border.BevelBorder;
 import javax.swing.plaf.FontUIResource;
 
 import Controllers.Hub;
@@ -47,8 +48,10 @@ import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.SystemColor;
+import javax.swing.border.EtchedBorder;
 
-public class GUI {
+public class GUI implements ComponentListener{
 
 	/*
 	 * Variables
@@ -60,6 +63,8 @@ public class GUI {
 	public static double screenHeight;
 	private String[] results;
 	private String id;
+	private JButton btnQueryID;
+	private JButton btnDatabaseRetrieval;
 
 	/**
 	 * Launch the application.
@@ -71,6 +76,7 @@ public class GUI {
 				try {
 					GUI window = new GUI();
 					window.frmBit.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -414,7 +420,7 @@ public class GUI {
 		pnlButton.setLayout(gbl_pnlButton);
 		
 		// Add button to retrieve entered blade id info from database
-		JButton btnQueryID = new JButton("QUERY ID");
+		btnQueryID = new JButton("QUERY BLADE ID");
 		btnQueryID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// Get blade id from textfield and query the database for blade info
@@ -450,24 +456,25 @@ public class GUI {
 					JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);				}
 			}
 		});
+		
 		btnQueryID.setForeground(Color.BLACK);
-		btnQueryID.setBackground(Color.LIGHT_GRAY);
-		btnQueryID.setIcon(null);
+		btnQueryID.setBackground(SystemColor.inactiveCaption);
 		btnQueryID.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnQueryID.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnQueryID.setPreferredSize(new Dimension(360, 60));
-		btnQueryID.setMaximumSize(new Dimension(460, 80));
+		btnQueryID.setPreferredSize(new Dimension(440, 80));
+		btnQueryID.setMaximumSize(new Dimension(540, 100));
 		btnQueryID.setFocusPainted(false);
-		btnQueryID.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnQueryID.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		btnQueryID.setFont(new Font("Arial", Font.PLAIN, 36));
 		GridBagConstraints gbc_btnQueryID = new GridBagConstraints();
 		gbc_btnQueryID.insets = new Insets(0, 0, 0, 5);
 		gbc_btnQueryID.gridx = 0;
 		gbc_btnQueryID.gridy = 0;
+		btnQueryID.addComponentListener(this);
 		pnlButton.add(btnQueryID, gbc_btnQueryID);
 		
 		// Add a button to retrieve whole database
-		JButton btnDatabaseRetrieval = new JButton("QUERY DATABASE");
+		btnDatabaseRetrieval = new JButton("QUERY DATABASE");
 		btnDatabaseRetrieval.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -476,19 +483,65 @@ public class GUI {
 			
 		});
 		btnDatabaseRetrieval.setForeground(Color.BLACK);
-		btnDatabaseRetrieval.setBackground(Color.LIGHT_GRAY);
+		btnDatabaseRetrieval.setBackground(SystemColor.inactiveCaption);
 		btnDatabaseRetrieval.setIcon(null);
 		btnDatabaseRetrieval.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnDatabaseRetrieval.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnDatabaseRetrieval.setPreferredSize(new Dimension(360, 60));
-		btnDatabaseRetrieval.setMaximumSize(new Dimension(460, 80));
+		btnDatabaseRetrieval.setPreferredSize(new Dimension(440, 80));
+		btnDatabaseRetrieval.setMaximumSize(new Dimension(540, 100));
 		btnDatabaseRetrieval.setFocusPainted(false);
-		btnDatabaseRetrieval.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnDatabaseRetrieval.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		btnDatabaseRetrieval.setFont(new Font("Arial", Font.PLAIN, 36));
 		GridBagConstraints gbc_btnDatabaseRetrieval = new GridBagConstraints();
+		gbc_btnDatabaseRetrieval.insets = new Insets(0,0,0,5);
 		gbc_btnDatabaseRetrieval.gridx = 1;
 		gbc_btnDatabaseRetrieval.gridy = 0;
+		btnDatabaseRetrieval.addComponentListener(this);
 		pnlButton.add(btnDatabaseRetrieval, gbc_btnDatabaseRetrieval);
 		
 	}
+
+
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		// Set size of icons for buttons
+		Component c = e.getComponent();
+		if (c.equals(btnQueryID)){
+			Image query_icon = new ImageIcon(getClass().getResource("/res/saw_query.png")).getImage();
+			Dimension query_size = btnQueryID.getSize();
+			Image query_scaled = query_icon.getScaledInstance(query_size.height, query_size.height - 10, java.awt.Image.SCALE_SMOOTH);
+			btnQueryID.setIcon(new ImageIcon(query_scaled));
+			btnQueryID.setVerticalTextPosition(SwingConstants.CENTER);
+			btnQueryID.setHorizontalTextPosition(SwingConstants.RIGHT);
+		}
+		
+		else{
+			Image database_icon = new ImageIcon(getClass().getResource("/res/Database-Search.png")).getImage();
+			Dimension database_size = btnDatabaseRetrieval.getSize();
+			Image database_scaled = database_icon.getScaledInstance(database_size.height, database_size.height - 10, java.awt.Image.SCALE_SMOOTH);
+			btnDatabaseRetrieval.setIcon(new ImageIcon(database_scaled));
+			btnDatabaseRetrieval.setVerticalTextPosition(SwingConstants.CENTER);
+			btnDatabaseRetrieval.setHorizontalTextPosition(SwingConstants.RIGHT);
+		}
+		
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		
+	}
+
+	
+	
 }
