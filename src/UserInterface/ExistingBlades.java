@@ -207,6 +207,12 @@ public class ExistingBlades extends JFrame implements Runnable{
 		machineID.setEditable(false);
 		infopanel.add(machineID, "cell 3 3,growx");
 		machineID.setColumns(10);
+		machineID.setText(results[1]);
+		
+		JLabel lblSawIdFormat = new JLabel("Integer Value");
+		lblSawIdFormat.setForeground(Color.RED);
+		lblSawIdFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lblSawIdFormat, "cell 4 3");
 		
 		// Create label, textfield, and format message for blade size
 		JLabel lblBladeSize = new JLabel("Blade Size :");
@@ -218,7 +224,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		bladeSize.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(bladeSize, "cell 3 5,growx");
 		bladeSize.setColumns(10);
-		bladeSize.setText(results[1]);
+		bladeSize.setText(results[2]);
 		
 		JLabel lbSizeFormat = new JLabel("Integer Value");
 		lbSizeFormat.setForeground(Color.RED);
@@ -235,7 +241,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		startDate.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(startDate, "cell 3 7,growx");
 		startDate.setColumns(10);
-		startDate.setText(results[2]);
+		startDate.setText(results[3]);
 		
 		JLabel lbDateFormat = new JLabel("YYYY-MM-DD HH:MM:SS.S");
 		lbDateFormat.setForeground(Color.RED);
@@ -252,7 +258,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		hoursUsed.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(hoursUsed, "cell 3 9,growx");
 		hoursUsed.setColumns(10);
-		hoursUsed.setText(results[3]);
+		hoursUsed.setText(results[4]);
 		
 		JLabel lbHoursFormat = new JLabel("Integer Value");
 		lbHoursFormat.setForeground(Color.RED);
@@ -269,6 +275,12 @@ public class ExistingBlades extends JFrame implements Runnable{
 		endofUse.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(endofUse, "cell 3 11,growx");
 		endofUse.setColumns(10);
+		endofUse.setText(results[5]);
+		
+		JLabel lblEndUseFormat = new JLabel("YYYY-MM-DD HH:MM:SS.S");
+		lblEndUseFormat.setForeground(Color.RED);
+		lblEndUseFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lblEndUseFormat, "cell 4 11");
 		
 		// Set a user message to acknowledge that blade has been updated
 		// Create label for message relaying blade has been updated when button pressed
@@ -278,10 +290,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 		lblEdited.setFont(font);
 		lblEdited.setHorizontalAlignment(SwingConstants.CENTER);
 		infopanel.add(lblEdited, "cell 3 12,growx");
-		
-		
-		
-		
+	
 	}
 	
 }
