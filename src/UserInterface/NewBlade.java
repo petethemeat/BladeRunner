@@ -31,8 +31,8 @@ public class NewBlade extends JFrame implements Runnable{
 	private JTextField bladeSize;
 	private JTextField startDate;
 	private JTextField hoursUsed;
-	private String[] fields = {"id", "blade_size", "start_date", "hours_used"}; 
-	private String[] values = new String[4];
+	private String[] fields = {"id", "saw_id", "blade_size", "start_date", "hours_used", "end_of_use"}; 
+	private String[] values = new String[6];
 	private JLabel lblNewBladeAdded;
 	private JTextField endofUse;
 	private JTextField machineID;
@@ -70,12 +70,12 @@ public class NewBlade extends JFrame implements Runnable{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				values[0] = bladeID.getText();
-				values[1] = bladeSize.getText();
-				values[2] = startDate.getText();
-				// Add error message if wrong format or nothing entered
+				values[1] = machineID.getText();
+				values[2] = bladeSize.getText();
+				values[3] = startDate.getText();
+				values[4] = hoursUsed.getText();
+				values[5] = endofUse.getText();
 				
-				
-				values[3] = hoursUsed.getText();
 				try {
 					AddController.run(fields, values);
 				} catch (SQLException e) {
@@ -173,6 +173,11 @@ public class NewBlade extends JFrame implements Runnable{
 		infopanel.add(machineID, "cell 3 3,growx");
 		machineID.setColumns(10);
 		
+		JLabel lblSawIDFormat = new JLabel("Integer Value");
+		lblSawIDFormat.setForeground(Color.RED);
+		lblSawIDFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lblSawIDFormat, "cell 4 3");
+		
 		// Create label, textfield, and format for blade size
 		JLabel lblBladeSize = new JLabel("Blade Size :");
 		lblBladeSize.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -234,6 +239,11 @@ public class NewBlade extends JFrame implements Runnable{
 		endofUse.setFont(new Font("Arial", Font.PLAIN, 22));
 		infopanel.add(endofUse, "cell 3 11,growx");
 		endofUse.setColumns(10);
+		
+		JLabel lblEndUseFormat = new JLabel("YYYY-MM-DD HH:MM:SS.S");
+		lblEndUseFormat.setForeground(Color.RED);
+		lblEndUseFormat.setFont(new Font("Arial", Font.PLAIN, 16));
+		infopanel.add(lblEndUseFormat, "cell 4 11");
 		
 		// Set a user message to acknowledge that blade has been added
 		lblNewBladeAdded = new JLabel("New Blade Added to Database");
