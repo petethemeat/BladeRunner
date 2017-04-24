@@ -12,13 +12,16 @@ import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.FontUIResource;
 
 import Controllers.AddController;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
 public class NewBlade extends JFrame implements Runnable{
@@ -80,6 +83,12 @@ public class NewBlade extends JFrame implements Runnable{
 					AddController.run(fields, values);
 				} catch (SQLException e) {
 					e.printStackTrace();
+					// Show a pop up message that relays to user that blade already exists
+					lblNewBladeAdded.setVisible(false);
+					String errormessage = new String("<html><font size='5';font face='arial'>Blade Already Exists in Database");
+					UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+					JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				// Show a message to relay to customer that new blade was added to database
 				lblNewBladeAdded.setVisible(true);
