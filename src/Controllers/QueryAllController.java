@@ -8,7 +8,7 @@ import Database.dbSource;
 
 public class QueryAllController 
 {
-	public static ArrayList<String[]> run() throws SQLException
+	public static String[][] run() throws SQLException
 	{
 		
 		dbSource source = Hub.getSource();
@@ -21,7 +21,14 @@ public class QueryAllController
 	
 		//This depends on what we are trying to display.
 		ArrayList<String[]> results = connection.getTableContents(fields);
-		return results;
+		
+		String[][] rss = new String[results.size()][];
+		for(int i = 0; i < results.size(); i++)
+		{
+			rss[i] = results.get(i);
+		}
+		return rss;
 	}
+	
 
 }
