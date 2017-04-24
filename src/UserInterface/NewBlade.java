@@ -82,10 +82,10 @@ public class NewBlade extends JFrame implements Runnable{
 				try {
 					AddController.run(fields, values);
 				} catch (SQLException e) {
-					e.printStackTrace();
 					// Show a pop up message that relays to user that blade already exists
 					lblNewBladeAdded.setVisible(false);
-					String errormessage = new String("<html><font size='5';font face='arial'>Blade Already Exists in Database");
+					String message = e.getMessage();
+					String errormessage = new String("<html><font size='5';font face='arial'>" + message);
 					UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
 					JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
 					return;
