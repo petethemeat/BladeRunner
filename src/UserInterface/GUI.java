@@ -479,6 +479,9 @@ public class GUI implements ComponentListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// Retrieve and show the user the whole database of blades
+				FullDatabase querydatabase = new FullDatabase();
+				querydatabase.setVisible(true);
+				querydatabase.setLocationRelativeTo(frmBit);
 			}
 			
 		});
