@@ -1,6 +1,7 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class dbConnection 
 {
@@ -99,6 +100,23 @@ public class dbConnection
 		
 		rs.deleteRow(); 
 		
+	}
+	
+	public ArrayList<String[]> getTableContents(String[] fields) throws SQLException
+	{
+		ArrayList<String[]> results = new ArrayList<String[]>();
+		ResultSet rs = this.getTable();
+		while(rs.next())
+		{
+			String result[] = new String[fields.length];
+			for(int i = 0; i < fields.length; i++)
+			{
+				result[i] = rs.getString(fields[i]);
+			}
+			results.add(result);
+		}
+		
+		return results;
 	}
 	
 }
