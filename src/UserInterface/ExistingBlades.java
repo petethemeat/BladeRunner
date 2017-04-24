@@ -108,8 +108,10 @@ public class ExistingBlades extends JFrame implements Runnable{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				values[0] = bladeSize.getText();
-				values[1] = startDate.getText();
-				values[2] = hoursUsed.getText();
+				values[1] = machineID.getText();
+				values[2] = startDate.getText();
+				values[3] = hoursUsed.getText();
+				values[4] = endofUse.getText();
 				try {
 					UpdateController.run(id, values, fields);
 				} catch (SQLException e) {
@@ -118,8 +120,10 @@ public class ExistingBlades extends JFrame implements Runnable{
 				lblEdited.setVisible(true);
 				// Set all fields to uneditable after updating blade
 				bladeSize.setEditable(false);
+				machineID.setEditable(false);
 				startDate.setEditable(false);
 				hoursUsed.setEditable(false);
+				endofUse.setEditable(false);
 			}
 			
 		});
@@ -150,6 +154,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 						 */
 						lblEdited.setText("Blade ID #" + id + " has already been deleted");
 						lblEdited.setVisible(true);
+						return;
 						
 					}
 					lblEdited.setText("Blade ID #" + id + " has been deleted");
