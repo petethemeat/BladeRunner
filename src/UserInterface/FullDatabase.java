@@ -5,18 +5,12 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
+import java.awt.Dimension;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.awt.GridBagConstraints;
-import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-
 import Controllers.QueryAllController;
 
-import javax.swing.JTextArea;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
 public class FullDatabase extends JFrame implements Runnable{
@@ -24,7 +18,7 @@ public class FullDatabase extends JFrame implements Runnable{
 	/**
 	 * Variables
 	 */
-	private Font font = new Font("Arial", Font.PLAIN, 20);
+	private Font font = new Font("Arial", Font.PLAIN, 30);
 	private String[][] results;
 	private JTable table;
 	private String[] columnNames = {"Blade ID", "Machine ID", "Blade Size", "Start Date", "Hours Used", "End Date"};
@@ -47,16 +41,18 @@ public class FullDatabase extends JFrame implements Runnable{
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setFont(new Font("Arial", Font.PLAIN, 20));
+		scrollPane.setFont(new Font("Arial", Font.PLAIN, 30));
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setSize((int)GUI.screenWidth/3, (int)GUI.screenHeight/2);
+		setSize((int)GUI.screenWidth - ((int)GUI.screenWidth/6), (int)GUI.screenHeight/2);
 		try {
 			results = QueryAllController.run();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		table = new JTable(results, columnNames);
-		table.setFont(new Font("Arial", Font.PLAIN, 20));
+		table.setRowHeight(30);
+		table.setFont(new Font("Arial", Font.PLAIN, 30));
+		table.getTableHeader().setFont(font);
 		scrollPane.setViewportView(table);
 		
 	}
