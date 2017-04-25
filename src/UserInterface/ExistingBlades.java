@@ -78,22 +78,22 @@ public class ExistingBlades extends JFrame implements Runnable{
 		JButton btnEdit = new JButton("EDIT");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(bladeID.isEditable() && bladeSize.isEditable() && startDate.isEditable() && hoursUsed.isEditable() 
-					&& machineID.isEditable() && endofUse.isEditable()){
+				if(machineID.isEditable() && bladeSize.isEditable() && startDate.isEditable() && hoursUsed.isEditable() 
+					&& endofUse.isEditable()){
+					machineID.setEditable(false);
 					bladeSize.setEditable(false);
 					startDate.setEditable(false);
 					hoursUsed.setEditable(false);
-					machineID.setEditable(false);
 					endofUse.setEditable(false);
 				}
 				else{
 					// Make updated message dissapear since they are choosing to re-edit
 					lblEdited.setVisible(false);
 					// Set fields to editable for customer to change values
+					machineID.setEditable(true);
 					bladeSize.setEditable(true);
 					startDate.setEditable(true);
 					hoursUsed.setEditable(true);
-					machineID.setEditable(true);
 					endofUse.setEditable(true);
 				}
 			}
@@ -147,11 +147,7 @@ public class ExistingBlades extends JFrame implements Runnable{
 					try {
 						DeleteController.run(bladeID.getText());
 					} catch (SQLException e1) {
-						e1.printStackTrace();
 						
-						/*
-						 * This is not working for unknown reason at this time
-						 */
 						lblEdited.setText("Blade ID #" + id + " has already been deleted");
 						lblEdited.setVisible(true);
 						return;
