@@ -36,21 +36,25 @@ public class FullDatabase extends JFrame implements Runnable{
 	 * Create the application.
 	 */
 	public FullDatabase() {
+		// Setup window for query
 		setTitle("Database");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setFont(font);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		setSize((int)GUI.screenWidth - ((int)GUI.screenWidth/6), (int)GUI.screenHeight/2);
+		// Attempt to call controller and pull whole database
 		try {
 			results = QueryAllController.run();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		// Add all headers and data to table and set proper font and size
 		table = new JTable(results, columnNames);
 		table.setRowHeight(30);
 		table.setFont(font);
 		table.getTableHeader().setFont(font);
+		// Set preferred widths of columns
 		TableColumn column = null;
 		for (int i = 0; i <= 5; i++) {
 		    column = table.getColumnModel().getColumn(i);
@@ -60,6 +64,7 @@ public class FullDatabase extends JFrame implements Runnable{
 		        column.setPreferredWidth(20);
 		    }
 		}
+		// Add table to scrollPane for viewing
 		scrollPane.setViewportView(table);
 		
 	}

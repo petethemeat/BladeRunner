@@ -26,10 +26,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
+import javax.swing.plaf.FontUIResource;
 
 import Controllers.QRGeneratorController;
 import net.miginfocom.swing.MigLayout;
@@ -101,51 +104,79 @@ public class QRGeneration extends JFrame implements Runnable{
 				// Eliminate end of string to pass to controller
 				Integer endindex = size.indexOf(" ");
 				size = size.substring(0, endindex);
-				System.out.println(size);
 				Integer qrsize = Integer.parseInt(size);
 				String encoding = id.getText();
-				try {
-					qrpath = QRGeneratorController.run(qrsize, encoding);
-				} catch (IllegalArgumentException e2) {
-					e2.printStackTrace();
-				} catch (IOException e2) {
-					e2.printStackTrace();
+				// Check for empty id and pop up error if so
+				if(encoding.isEmpty()){
+					String error = new String("<html><font size='5';font face='arial'>Enter Identification Text");
+					UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+					JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				try {
-					buffer = new byte[qrpath.available()];
-					qrpath.read(buffer);
-					// Write image buffer to temporary file to add to preview pane
-					temp = File.createTempFile("temp", ".png");
-					outStreamTemp = new FileOutputStream(temp);
-					outStreamTemp.write(buffer);
-		
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				
-				try {
-					img = ImageIO.read(temp);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				// Add image to imagepanel preview label
-				Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/6, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
-				qrimage.setIcon(new ImageIcon(scaledimg));
-				// Acknowledge file created for user
-				qrCreated.setText("<html>QR Image Generated<br><&nbsp Please Save to File</html>");
-				qrCreated.setVisible(true);
+				// If text is entered generate qr code and show it to user
+				else{
+					try {
+						qrpath = QRGeneratorController.run(qrsize, encoding);
+					} catch (IllegalArgumentException e2) {
+						String message = e2.getMessage();
+						String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					} catch (IOException e2) {
+						String message = e2.getMessage();
+						String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					try {
+						buffer = new byte[qrpath.available()];
+						qrpath.read(buffer);
+						// Write image buffer to temporary file to add to preview pane
+						temp = File.createTempFile("temp", ".png");
+						outStreamTemp = new FileOutputStream(temp);
+						outStreamTemp.write(buffer);
 			
-				// Delete temp file
-				temp.delete();
+					} catch (IOException e1) {
+						String message = e1.getMessage();
+						String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					try {
+						img = ImageIO.read(temp);
+					} catch (IOException e1) {
+						String message = e1.getMessage();
+						String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					// Add image to imagepanel preview label
+					Image scaledimg = img.getScaledInstance((int)GUI.screenWidth/6, (int)GUI.screenHeight/6,  java.awt.Image.SCALE_SMOOTH);
+					qrimage.setIcon(new ImageIcon(scaledimg));
+					// Acknowledge file created for user
+					qrCreated.setText("<html>QR Image Generated<br><&nbsp Please Save to File</html>");
+					qrCreated.setVisible(true);
 				
-				// Close streams to release resources 
-				try {
-					qrpath.close();
-					outStreamTemp.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+					// Delete temp file
+					temp.delete();
+					
+					// Close streams to release resources 
+					try {
+						qrpath.close();
+						outStreamTemp.close();
+					} catch (IOException e1) {
+						String message = e1.getMessage();
+						String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+						UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+						JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
-				
+			
 			}
 			
 		});
@@ -174,45 +205,62 @@ public class QRGeneration extends JFrame implements Runnable{
 			// Close window upon selection of close button
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser saveBrowser = new JFileChooser(home + "/Desktop");
-				// Set Chooser size in relation to computer screen
-				saveBrowser.setPreferredSize(new Dimension((int)GUI.screenWidth/2, (int)GUI.screenHeight/2));
-				// Set font for jfilechooser so user can see it
-				setFileChooserFont(saveBrowser.getComponents());
-				
-			    // Demonstrate "Save" dialog:
-			    int rVal = saveBrowser.showSaveDialog(QRGeneration.this);
-			    if (rVal == JFileChooser.APPROVE_OPTION) {
-			    	qrname = saveBrowser.getSelectedFile().getName();
-			    	if(qrname.endsWith(".png")){
-			    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname);
-			    	}
-			    	else { 
-			    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname + ".png");
-			    	}
-					try {
-						outStreamTarget = new FileOutputStream(targetFile);
-						outStreamTarget.write(buffer);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					// Display message to user acknowledging the save
-					qrCreated.setText("<html><br>File Saved</html>");
+				// Check to see if there is anything generated in the buffer first
+				if(buffer == null){
+					String errormessage = new String("<html><font size='5';font face='arial'>Please Generate QR First");
+					UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+					JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					JFileChooser saveBrowser = new JFileChooser(home + "/Desktop");
+					// Set Chooser size in relation to computer screen
+					saveBrowser.setPreferredSize(new Dimension((int)GUI.screenWidth/2, (int)GUI.screenHeight/2));
+					// Set font for jfilechooser so user can see it
+					setFileChooserFont(saveBrowser.getComponents());
 					
-					// Close output stream after completion
-				    try {
-				    	outStreamTarget.close();
-				    } catch (IOException e) {
-						e.printStackTrace();
-				    }
-				      
-			     }
-			     // If cancel is chosen hide the filechooser window
-			     if (rVal == JFileChooser.CANCEL_OPTION) {
-			    	 saveBrowser.setVisible(false);
-			     }
+				    // Demonstrate "Save" dialog:
+				    int rVal = saveBrowser.showSaveDialog(QRGeneration.this);
+				    if (rVal == JFileChooser.APPROVE_OPTION) {
+				    	qrname = saveBrowser.getSelectedFile().getName();
+				    	if(qrname.endsWith(".png")){
+				    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname);
+				    	}
+				    	else { 
+				    		targetFile = new File(saveBrowser.getCurrentDirectory().toString() + "\\" + qrname + ".png");
+				    	}
+						try {
+							outStreamTarget = new FileOutputStream(targetFile);
+							outStreamTarget.write(buffer);
+						} catch (FileNotFoundException e) {
+							String message = e.getMessage();
+							String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+							UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+							JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						} catch (IOException e) {
+							String message = e.getMessage();
+							String errormessage = new String("<html><font size='5';font face='arial'>" + message);
+							UIManager.put("OptionPane.buttonFont", new FontUIResource(font));
+							JOptionPane.showMessageDialog(null, errormessage, "Error", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						// Display message to user acknowledging the save
+						qrCreated.setText("<html><br>File Saved</html>");
+						
+						// Close output stream after completion
+					    try {
+					    	outStreamTarget.close();
+					    } catch (IOException e) {
+							e.printStackTrace();
+					    }
+					      
+				     }
+				     // If cancel is chosen hide the filechooser window
+				     if (rVal == JFileChooser.CANCEL_OPTION) {
+				    	 saveBrowser.setVisible(false);
+				     }
+				}
+				
 			}
 			
 		});
