@@ -55,7 +55,7 @@ public class FullDatabase extends JFrame implements Runnable{
 		for (int i = 0; i <= 5; i++) {
 		    column = table.getColumnModel().getColumn(i);
 		    if (i == 3 || i == 5) {
-		        column.setPreferredWidth(100); //4th and 6th column is bigger
+		        column.setPreferredWidth(150); //4th and 6th column is bigger
 		    } else {
 		        column.setPreferredWidth(20);
 		    }
